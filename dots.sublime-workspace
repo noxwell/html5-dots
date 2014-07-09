@@ -1,0 +1,614 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"lo",
+				"localStorage"
+			],
+			[
+				"s",
+				"status"
+			],
+			[
+				"re",
+				"response"
+			],
+			[
+				"pa",
+				"param"
+			],
+			[
+				"pass",
+				"passwd"
+			],
+			[
+				"c",
+				"crypto"
+			],
+			[
+				"body",
+				"bodyParser"
+			],
+			[
+				"ge",
+				"getQueue"
+			],
+			[
+				"v",
+				"vector	std::vector"
+			],
+			[
+				"mi",
+				"mi"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"int",
+				"int"
+			],
+			[
+				"b",
+				"b"
+			],
+			[
+				"sh",
+				"showStandings"
+			],
+			[
+				"sta",
+				"showStandings"
+			],
+			[
+				"p",
+				"pathname"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"L",
+				"lastError"
+			],
+			[
+				"co",
+				"code_template"
+			],
+			[
+				"get",
+				"getSamples"
+			],
+			[
+				"ma",
+				"margin-left"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
+				"sho",
+				"showOverlay"
+			],
+			[
+				"tk_",
+				"tk_overlay"
+			],
+			[
+				"r",
+				"rdbuf"
+			],
+			[
+				"raw",
+				"raw_output"
+			],
+			[
+				"raw_",
+				"raw_input"
+			],
+			[
+				"ra",
+				"raw_input"
+			],
+			[
+				"fa",
+				"fadeOut"
+			],
+			[
+				"hi",
+				"hideOverlay"
+			],
+			[
+				"tk",
+				"tk_overlay"
+			],
+			[
+				"ex",
+				"execInContentScript"
+			],
+			[
+				"fu",
+				"function"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"margin",
+				"margin-bottom"
+			],
+			[
+				"mar",
+				"margin-top"
+			],
+			[
+				"font",
+				"font-family"
+			],
+			[
+				"t",
+				"toolkit"
+			],
+			[
+				"n",
+				"n"
+			],
+			[
+				"st",
+				"string"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "frontend/index.html",
+			"settings":
+			{
+				"buffer_size": 628,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "backend/server.js",
+			"settings":
+			{
+				"buffer_size": 2106,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "db_arch.txt",
+			"settings":
+			{
+				"buffer_size": 317,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/js/app.js",
+			"settings":
+			{
+				"buffer_size": 613,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/js/controllers.js",
+			"settings":
+			{
+				"buffer_size": 1709,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/partials/login.html",
+			"settings":
+			{
+				"buffer_size": 190,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/partials/queue.html",
+			"settings":
+			{
+				"buffer_size": 135,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 347.0,
+		"selected_items":
+		[
+			[
+				"Package Control: Li",
+				"Package Control: List Packages"
+			],
+			[
+				"Pak",
+				"Package Control: Install Package"
+			],
+			[
+				"Packa",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/admin/Documents/dots/frontend/index.html",
+		"/Users/admin/Documents/dots/frontend/js/services.js",
+		"/Users/admin/Documents/dots/frontend/js/filters.js",
+		"/Users/admin/Documents/dots/frontend/js/directives.js",
+		"/Users/admin/Documents/dots/backend/server.js",
+		"/Users/admin/Documents/contest/cf_toolkit/manifest.json",
+		"/Users/admin/Documents/contest/cf_test_parser/options.js",
+		"/Users/admin/Documents/contest/cf_test_parser/manifest.json",
+		"/Users/admin/Documents/contest/cf_test_parser/background.js",
+		"/Users/admin/Documents/contest/cf_test_parser/style.css",
+		"/Users/admin/Documents/contest/cf_test_parser/main.js",
+		"/Users/admin/Documents/contest/cf_test_parser/popup.js",
+		"/Users/admin/Documents/contest/cf_test_parser/popup.html",
+		"/Users/admin/Documents/contest/cf_test_parser/options.html",
+		"/Users/admin/Documents/contest/cf_test_parser/popup.css",
+		"/Users/admin/Library/Application Support/Sublime Text 3/Packages/SublimeClang/SublimeClang.sublime-settings",
+		"/Users/admin/Library/Application Support/Sublime Text 3/Packages/SublimeClang/Default.sublime-keymap",
+		"/Users/admin/Library/Application Support/Sublime Text 3/Packages/User/SublimeClang.sublime-settings"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"().",
+			"include",
+			"lude",
+			"include",
+			"d",
+			"include",
+			"namespace",
+			"define",
+			"efine",
+			"define"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "frontend/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 628,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								628,
+								628
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "backend/server.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2106,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1657,
+								1657
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "db_arch.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 317,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								316,
+								317
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "frontend/js/app.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 613,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								143,
+								143
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "frontend/js/controllers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1709,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								379,
+								379
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "frontend/partials/login.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 190,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								182,
+								182
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "frontend/partials/queue.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 135,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								69,
+								69
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "dots.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

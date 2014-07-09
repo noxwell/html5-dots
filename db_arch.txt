@@ -1,0 +1,22 @@
+-HSET users
+ -name => id
+-user:id
+ -name
+ -password
+ -token
+ -rating
+-SET queue (user id's)
+-HSET games
+ -channel => id
+-game:id
+ -field
+ -player:1
+ -player:2
+-HSET requests
+ -hash => id
+-request:id (expires in 15s)
+ -type (newgame, draw, stopgame)
+ -gameid
+ -player:1
+ -player:2
+ -state (new, fulfilled, chancelled)
