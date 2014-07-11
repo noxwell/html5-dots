@@ -1,6 +1,9 @@
 <ul class="queue">
-  <li ng-repeat="user in queue">
+  <li ng-repeat="user in queue" ng-click="requestGame(user.id)">
     {{user.name}}
     <p>id: {{user.id}}, rating: {{user.rating}}</p>
   </li>
+  <h1 ng-show="timeLeft > 0">{{timeLeft}}</h1>
+  <button ng-show="acceptingRequest" ng-click="acceptGame()">Принять игру</button>
+  <button ng-show="acceptingRequest || waitingAccept" ng-click="cancelRequest()">Отклонить игру</button>
 </ul>

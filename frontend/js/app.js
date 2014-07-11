@@ -13,6 +13,6 @@ app.config(function($routeProvider) {
 	when("/login",  {templateUrl:'partials/login.html',  controller:'loginFormCtrl'}).
 	when("/register",  {templateUrl:'partials/register.html',  controller:'registrationFormCtrl'}).
 	when("/queue",  {templateUrl:'partials/queue.html',  controller:'waitingRoomCtrl'}).
-	when("/game",  {templateUrl:'partials/game.html',  controller:'gameScreenCtrl'}).
+	when("/game/:channel",  {templateUrl:'partials/game.html',  controller:'gameScreenCtrl'}).
 	otherwise({redirectTo: '/login'});
 });

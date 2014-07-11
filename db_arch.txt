@@ -1,22 +1,24 @@
 -HSET users
  -name => id
+-last_userid
 -user:id
  -name
  -password
  -token
  -rating
--SET queue (user id's)
+-ZSET queue
+ -user_id => timestamp
+-ZSET requests
+ -user_id => timestamp
+-request:id
+ -type (newgame, draw, stopgame)
+ -gameid
+ -target
 -HSET games
  -channel => id
+-last_gameid
 -game:id
+ -channel
  -field
  -player:1
  -player:2
--HSET requests
- -hash => id
--request:id (expires in 15s)
- -type (newgame, draw, stopgame)
- -gameid
- -player:1
- -player:2
- -state (new, fulfilled, chancelled)
