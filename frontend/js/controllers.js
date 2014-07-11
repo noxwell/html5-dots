@@ -223,12 +223,12 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 				console.log('Unknown message type:' + message.type);
 		}
 	};
-	$scope.iamalive = function(){
-		$scope.pubsub.publish('/game/queue', {type: 'heartbeat'});
-	};
 
 	$scope.subscription = $scope.pubsub.subscribe('/game/queue', $scope.onQueueMessage);
 
+	$scope.iamalive = function(){
+		$scope.pubsub.publish('/game/queue', {type: 'heartbeat'});
+	};
 	$scope.heartbeat = $interval(function(){
 		$scope.iamalive();
 	}, 5000);
@@ -243,6 +243,59 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 	});
 }]);
 
-controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams', function($scope, $location, $routeParams) {
-	$scope.channel = $routeParams.channel;	
+controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams', '$interval', function($scope, $location, $routeParams, $interval) {
+	$scope.channel = $routeParams.channel;
+	$scope.player = 0; //0 - spectator
+	$scope.current_player = 1;
+	$scope.field = {width: 39, heigth: 32, color: [], active: [], connect: []};
+	for(var i = 0; i < $scope.field.heigth; i++)
+	{
+		$scope.field.color[i] = [];
+		$scope.field.active[i] = [];
+		for(var j = 0; j < $scope.field.width; j++)
+		{
+			$scope.field.color[i][j] = 0;
+			$scope.field.active[i][j] = 1;
+		}
+	}
+	$scope.onGameMessage = function(message){
+		switch(message.type)
+		{
+			case 'heartbeat':
+				if(message.id == $scope.$storage.auth.id)
+					$scope.player = message.player;
+				break;
+			case 'request':
+				break;
+			case 'move':
+				console.log('mov');
+				$scope.$apply(function(){
+					$scope.field.color[message.x][message.y] = message.player;
+					$scope.current_player = ($scope.current_player == 1) ? 2 : 1;
+				});
+				break;
+			case 'zone':
+				break;
+			case 'gameover':
+				break;
+			default:
+				console.log('Unknown message type:' + message.type);
+		}
+	};
+	$scope.subscription = $scope.pubsub.subscribe('/game/' + $scope.channel, $scope.onGameMessage);
+
+	$scope.iamalive = function(){
+		$scope.pubsub.publish('/game/' + $scope.channel, {type: 'heartbeat'});
+	};
+	$scope.heartbeat = $interval(function(){
+		$scope.iamalive();
+	}, 5000);
+	$scope.iamalive(); //because interval executes only after some time
+
+	$scope.doMove = function(x, y){
+		//console.log(x, y);
+		if($scope.current_player == $scope.player && $scope.field.active[x][y])
+			$scope.pubsub.publish('/game/' + $scope.channel, {type: 'move', x: x, y: y});
+	}
+
 }]);

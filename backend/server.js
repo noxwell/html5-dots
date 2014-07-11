@@ -126,12 +126,39 @@ function createGame(player_1, player_2, message, callback)
 				var channel = buf.toString('hex');
 				db.incr('last_gameid', function(err, game_id){
 					db.hset('games', channel, game_id);
-					db.hmset('game:' + game_id, 'channel', channel, 'field', 'empty', 'player:1', player_1, 'player:2', player_2);
+					db.hmset('game:' + game_id, 'channel', channel, 'field', 'empty', 'player_1', player_1, 'player_2', player_2);
 					bayeux.getClient().publish('/game/queue', {type: 'new_game', id: 0, channel: channel, player_1: player_1, player_2: player_2});
 				});
 			});
 		}
 		callback(message);
+	});
+}
+
+function gameChannel(channel, id, message, callback)
+{
+	db.hget('games', channel, function(err, game_id){
+		if(game_id == null)
+		{
+			message.error = '404::Game not found';
+			callback(message);
+		}
+		db.hgetall('game:' + game_id, function(err, game){
+			if(game.player_1 == id)
+				message.data.player = 1;
+			else if (game.player_2 == id)
+				message.data.player = 2;
+			else
+			{
+				callback(message);
+			}
+
+			if(message.type == 'heartbeat')
+			{
+				db.hset('game', 'timestamp_' + message.data.player, timestamp());
+			}
+			callback(message);
+		});
 	});
 }
 
@@ -182,6 +209,11 @@ bayeux.addExtension({
 		checkAuth(auth, function(user){
 			if(message.data != null)
 				message.data.id = auth.id;
+
+			var game_channel = /\/game\/([a-f0-9]+)$/.exec(message.channel);
+			if(game_channel != null && typeof game_channel[1] !== undefined)
+				return gameChannel(game_channel[1], auth.id, message, callback);
+
 			if(message.channel == '/game/queue' && message.type == 'new_game' && auth.id != 0) //only server can send new_game messages
 				return unauthorized_message(message, callback)();
 			if(message.channel == '/game/queue' && message.data.type == 'heartbeat')

@@ -1,0 +1,37 @@
+.color_0
+{
+	color: rgba(0, 0, 0, 0);
+}
+
+.color_1
+{
+	color: rgba(255, 0, 0, 1);
+}
+
+.color_2
+{
+	color: rgba(0, 0, 255, 1);
+}
+
+.point
+{
+	margin-right: 12px;
+}
+
+.row
+{
+	margin-top: -10px;
+	margin-bottom: 0px;
+	cursor: default;
+}
+
+#game_field
+{
+	background: url('../img/bg.png') repeat;
+	background-position-x: 4px;
+	background-position-y: 15px;
+	width: 802px;
+	margin-top: 30px;
+	margin-left: 15px;
+	font-size: 20pt;
+}

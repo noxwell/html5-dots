@@ -1,1 +1,5 @@
-THIS IS GAME!!!!! {{channel}}
+<div id="game_field">
+	<div class="row" ng-repeat = "row in field.color track by $index">
+		<span class="point" ng-repeat = "point in row track by $index"><span class="{{'color_' + point}}" ng-click="doMove($parent.$index, $index)">&bull;</span></span>
+	</div>
+</div>
