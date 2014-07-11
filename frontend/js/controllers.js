@@ -214,7 +214,9 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 			case 'new_game':
 				if(message.player_1 == $scope.$storage.auth.id || message.player_2 == $scope.$storage.auth.id)
 				{
-					$location.path('/game/' + message.channel);
+					$scope.$apply(function(){
+						$location.path('/game/' + message.channel);
+					});
 				}
 				break;
 			default:
@@ -233,8 +235,8 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 	$scope.iamalive(); //because interval executes only after some time
 
 	$scope.$on('$destroy', function(){
-		$scope.subscription.cancel();
 		$scope.leaveChannel('/game/queue');
+		$scope.subscription.cancel();
 		if($scope.countdown != null)
 			$interval.cancel($scope.countdown);
 		$interval.cancel($scope.heartbeat);
