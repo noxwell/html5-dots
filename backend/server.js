@@ -139,8 +139,8 @@ function cancelRequest(id, target, message, callback)
 
 function emptyField()
 {
-	field = {width: 39, heigth: 32, color: [], captured: [], zones: []};
-	for(var i = 0; i < field.heigth; i++)
+	field = {width: 39, height: 32, color: [], captured: [], zones: []};
+	for(var i = 0; i < field.height; i++)
 	{
 		field.color[i] = [];
 		field.captured[i] = [];
@@ -177,10 +177,10 @@ function createGame(player_1, player_2, message, callback)
 
 var neighbours = [{x: 0, y: -1}, {x: -1, y: -1}, {x: -1, y: 0}, {x: -1, y: 1}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 0}, {x: 1, y: -1}];
 
-function emptyArea(heigth, width)
+function emptyArea(height, width)
 {
 	var area = [];
-	for(var i = 0; i < heigth; i++)
+	for(var i = 0; i < height; i++)
 	{
 		area[i] = [];
 		for(var j = 0; j < width; j++)
@@ -191,48 +191,109 @@ function emptyArea(heigth, width)
 
 function fillArea(area, field, point, color)
 {
+	if(point.x < 0 || point.x >= field.height || point.y < 0 || point.y >= field.width || area[point.x][point.y] || field.color[point.x][point.y] == color)
+		return;
 	area[point.x][point.y] = 1;
 	for(var i = 0; i < neighbours.length; i += 2) //we don't need corners
 	{
 		var x = point.x + neighbours[i].x;
 		var y = point.y + neighbours[i].y;
-		if(x >= 0 && x < field.heigth && y >= 0 && y < field.width && !area[x][y] && field.color[x][y] != color)
-			area = fillArea(area, field, {x: x, y: y}, color);
+		fillArea(area, field, {x: x, y: y}, color);
 	}
-	return area;
 }
 
-function isAreaOpen(area, heigth, width)
+function findCutpoints(area, timer, tin, fup, open_area, field, point, parent)
 {
-	var open = false;
-	for(var i = 0; i < width; i++)
+	area[point.x][point.y] = 1;
+	tin[point.x][point.y] = fup[point.x][point.y] = ++timer.time;
+	var children = 0;
+	for(var i = 0; i < neighbours.length; i++)
 	{
-		open |= area[0][i] | area[heigth - 1][i];
-	}
-	for(var i = 0; i < heigth; i++)
-		open |= area[i][0] | area[i][width - 1];
-	return open;
-}
-
-function borderLine(area, field, color)
-{
-	for(var i = 0; i < field.heigth; i++)
-	{
-		for(var j = 0; j < field.width; j++)
+		var x = point.x + neighbours[i].x;
+		var y = point.y + neighbours[i].y;
+		if(x < 0 || x >= field.height || y < 0 || y >= field.width || open_area[x][y] || (x == parent.x && y == parent.y))
+			continue;
+		if(area[x][y])
 		{
-			if(area[i][j] != 1)
-				continue;
-			for(var k = 0; k < neighbours.length; k++)
+			fup[point.x][point.y] = Math.min(fup[point.x][point.y], tin[x][y]);
+		}
+		else
+		{
+			findCutpoints(area, timer, tin, fup, open_area, field, {x: x, y: y}, point);
+			fup[point.x][point.y] = Math.min(fup[point.x][point.y], fup[x][y]);
+			if (fup[x][y] >= tin[point.x][point.y] && parent.x != -1)
 			{
-				var x = i + neighbours[k].x;
-				var y = j + neighbours[k].y;
-				if(x >= 0 && x < field.heigth && y >= 0 && y < field.width && field.color[x][y] == color)
-					area[x][y] = 2;
+				area[point.x][point.y] = 2;
+			}
+			children++;
+		}
+	}
+	if(parent.x == -1 && children > 1)
+		area[point.x][point.y] = 2;
+}
+
+function clearOpenArea(area, open_area, field)
+{
+	for(var i = 0; i < field.height; i++)
+		for(var j = 0; j < field.width; j++)
+			if(area[i][j])
+				open_area[i][j] = 1;
+}
+
+function splitArea(used, area, areas, current, tin, fup, field, point, parent)
+{
+	used[point.x][point.y] = 1;
+	areas[current][point.x][point.y] = 1;
+	var children = 0;
+	for(var i = 0; i < neighbours.length; i++)
+	{
+		var x = point.x + neighbours[i].x;
+		var y = point.y + neighbours[i].y;
+		if(x < 0 || x >= field.height || y < 0 || y >= field.width || !area[x][y] || used[x][y] || (x == parent.x && y == parent.y))
+			continue;
+		children++;
+		if((fup[x][y] >= tin[point.x][point.y] && parent.x != -1) || (parent.x == -1 && children > 1))
+		{
+			var new_current = areas.length;
+			areas[new_current] = emptyArea(field.height, field.width);
+			areas[new_current][point.x][point.y] = 1;
+			splitArea(used, area, areas, new_current, tin, fup, field, {x: x, y: y}, point);
+		}
+		else
+		{
+			splitArea(used, area, areas, current, tin, fup, field, {x: x, y: y}, point);
+		}
+	}
+}
+
+function findAreas(open_area, field)
+{
+	var areas = [];
+	var current = 0;
+	for(var x = 0; x < field.height; x++)
+	{
+		for(var y = 0; y < field.width; y++)
+		{
+			if(!open_area[x][y])
+			{
+				var area = emptyArea(field.height, field.width);
+				var tin = emptyArea(field.height, field.width);
+				var fup = emptyArea(field.height, field.width);
+				findCutpoints(area, {time: 0}, tin, fup, open_area, field, {x: x, y: y}, {x: -1, y: -1});
+				clearOpenArea(area, open_area, field);
+				areas[current] = emptyArea(field.height, field.width);
+				splitArea(emptyArea(field.height, field.width), area, areas, current, tin, fup, field, {x: x, y: y}, {x: -1, y: -1});
+				current = areas.length;
 			}
 		}
 	}
+	return areas;
+}
+
+function borderLine(area, field)
+{
 	var start = null;
-	for(var i = 0; i < field.heigth; i++)
+	for(var i = 0; i < field.height; i++)
 	{
 		for(var j = 0; j < field.width; j++)
 		{
@@ -246,18 +307,31 @@ function borderLine(area, field, color)
 			break;
 	}
 	var point = start;
+	var parent = {x: -1, y: -1}
 	console.log(start);
 	var line = [];
 	do
 	{
 		var i = 0;
+		if(parent.x != -1)
+		{
+			while(true)
+			{	
+				var x = point.x + neighbours[i].x;
+				var y = point.y + neighbours[i].y;
+				if(parent.x == x && parent.y == y)
+					break;
+				i++;
+			}
+		}
 		while(true)
 		{
 			var j = (i + 1) % neighbours.length;
 			var xi = point.x + neighbours[i].x, xj = point.x + neighbours[j].x;
 			var yi = point.y + neighbours[i].y, yj = point.y + neighbours[j].y;
-			if((xi < 0 || xi >= field.heigth || yi < 0 || yi >= field.width || area[xi][yi] == 0) && (xj >= 0 && xj < field.heigth && yj >= 0 && yj < field.width && area[xj][yj] != 0))
+			if((xi < 0 || xi >= field.height || yi < 0 || yi >= field.width || area[xi][yi] == 0) && (xj >= 0 && xj < field.height && yj >= 0 && yj < field.width && area[xj][yj] != 0))
 			{
+				parent = point;
 				point = {x: xj, y: yj};
 				break;
 			}
@@ -269,43 +343,69 @@ function borderLine(area, field, color)
 	return line;
 }
 
-function updateCaptured(line, field, color)
+function checkArea(area, field, color)
 {
-	var area = emptyArea(field.heigth, field.width);
+	var anticolor = 3 - color;
+	for(var i = 0; i < field.height; i++)
+	{
+		for(var j = 0; j < field.width; j++)
+		{
+			if(area[i][j] && (field.color[i][j] == anticolor))
+				return true;
+		}
+	}
+	return false;
+}
+
+function checkLine(line, field, color)
+{
+	var anticolor = 3 - color;
 	for(var i = 0; i < line.length; i++)
-		area[line[i].x][line[i].y] = 3; //border color
-	for(var i = 0; i < field.heigth; i++)
 	{
-		var capture = 0;
-		for(var j = 0; j < field.width; j++)
-		{
-			if(area[i][j] != 3)
-				area[i][j] = capture;
-			else
-				capture = color;
-		}
-		for(var j = field.width - 1; j >= 0; j--)
-		{
-			if(area[i][j] != 3)
-				area[i][j] = 0;
-			else
-				break;
-		}
+		if(field.captured[line[i].x][line[i].y] == anticolor)
+			return false;
 	}
-	for(var i = 0; i < field.heigth; i++)
-	{
+	return true;
+}
+
+function updateCaptured(area, field, color)
+{
+	for(var i = 0; i < field.height; i++)
 		for(var j = 0; j < field.width; j++)
-		{
-			if(area[i][j] == color || area[i][j] == 3)
+			if(area[i][j])
 				field.captured[i][j] = color;
-		}
+}
+
+function findZones(message, field, color)
+{
+	var open_area = emptyArea(field.height, field.width);
+	for(var i = 0; i < field.width; i++)
+	{
+		fillArea(open_area, field, {x: 0, y: i}, color);
+		fillArea(open_area, field, {x: field.height - 1, y: i}, color);
 	}
+	for(var i = 0; i < field.height; i++)
+	{
+		fillArea(open_area, field, {x: i, y: 0}, color);
+		fillArea(open_area, field, {x: i, y: field.width - 1}, color);
+	}
+	areas = findAreas(open_area, field);
+	for(var i = 0; i < areas.length; i++)
+		if(checkArea(areas[i], field, color))
+		{
+			var line = borderLine(areas[i], field);
+			if(checkLine(line, field, color))
+			{
+				field.zones.push(borderLine(areas[i], field));
+				updateCaptured(areas[i], field, color);
+			}
+		}
 }
 
 function updateScores(field)
 {
 	score = [0, 0, 0];
-	for(var i = 0; i < field.heigth; i++)
+	for(var i = 0; i < field.height; i++)
 	{
 		for(var j = 0; j < field.width; j++)
 		{
@@ -317,29 +417,6 @@ function updateScores(field)
 	}
 	field.score_1 = score[1];
 	field.score_2 = score[2];
-}
-
-function findZones(message, field, point)
-{
-	for(var i = 0; i < neighbours.length; i++)
-	{
-		var x = point.x + neighbours[i].x;
-		var y = point.y + neighbours[i].y;
-		var color = field.color[point.x][point.y];
-		if(x >= 0 && x < field.heigth && y >= 0 && y < field.width && field.color[x][y] != color && !field.captured[x][y])
-		{
-			var area = fillArea(emptyArea(field.heigth, field.width), field, {x: x, y: y}, color);
-			console.log('test');
-			if(!isAreaOpen(area, field.heigth, field.width))
-			{
-				console.log('open');
-				var line = borderLine(area, field, color);
-				updateCaptured(line, field, color);
-				field.zones.push(line);
-				bayeux.getClient().publish(message.channel, {type: 'zone', id: message.data.id, zone: line});
-			}
-		}
-	}
 }
 
 function doMove(message, callback, game_id, field, point)
@@ -356,7 +433,10 @@ function doMove(message, callback, game_id, field, point)
 	}
 	field.color[point.x][point.y] = message.data.player;
 	console.log(field.color[point.x][point.y]);
-	findZones(message, field, point);
+	field.zones = [];
+	findZones(message, field, message.data.player);
+	findZones(message, field, 3 - message.data.player);
+	message.data.zones = field.zones;
 	updateScores(field);
 	message.data.score = [0, field.score_1, field.score_2];
 	db.hmset('game:' + game_id, 'current_player', ((message.data.player == 1) ? 2 : 1), 'field', JSON.stringify(field));

@@ -249,13 +249,19 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 	$scope.current_player = 1;
 	$scope.score = [0, 0, 0];
 	$scope.field = {};
+
+	$scope.canvas = $('#field_canvas')[0].getContext('2d');
+	$scope.canvasWidth = $('#field_canvas')[0].width;
+	$scope.canvasHeight = $('#field_canvas')[0].height;
+	$scope.offsetX = 13;
+	$scope.offsetY = 7;
+	$scope.ceilWidth = 21;
+	$scope.ceilheight = 21;
+
 	$.get(server + '/gameData', {id: $scope.$storage.auth.id, token: $scope.$storage.auth.token, channel: $scope.channel} , function(data) { //get current game
 		$scope.$apply(function(){
 			$scope.field = JSON.parse(data.field);
-			for(var i = 0; i < $scope.field.zones.length; i++)
-			{
-				$scope.drawZone($scope.field.zones[i]);
-			}
+			$scope.redrawZones();
 			if(data.player_1 == $scope.$storage.auth.id)
 				$scope.player = 1;
 			else if(data.player_2 == $scope.$storage.auth.id)
@@ -266,20 +272,24 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 		});
 	}, 'JSON');
 
-	$scope.canvas = $('#field_canvas')[0].getContext('2d');
-	$scope.offsetX = 13;
-	$scope.offsetY = 7;
-	$scope.ceilWidth = 21;
-	$scope.ceilHeigth = 21;
+	$scope.redrawZones = function()
+	{
+		$scope.canvas.clearRect(0, 0, $scope.canvasWidth, $scope.canvasHeight);
+		for(var i = 0; i < $scope.field.zones.length; i++)
+		{
+			$scope.drawZone($scope.field.zones[i]);
+		}
+	}
+
 	$scope.drawZone = function(zone)
 	{
 		$scope.canvas.beginPath();
 		var offx = 5;
 		var offy = 12;
-		$scope.canvas.moveTo(offy + zone[0].y * $scope.ceilWidth, offx + zone[0].x * $scope.ceilHeigth);
+		$scope.canvas.moveTo(offy + zone[0].y * $scope.ceilWidth, offx + zone[0].x * $scope.ceilheight);
 		for(var i = 1; i < zone.length; i++)
 		{
-			$scope.canvas.lineTo(offy + zone[i].y * $scope.ceilWidth, offx + zone[i].x * $scope.ceilHeigth); //remember, that x points at row and y points at column!!!
+			$scope.canvas.lineTo(offy + zone[i].y * $scope.ceilWidth, offx + zone[i].x * $scope.ceilheight); //remember, that x points at row and y points at column!!!
 		}
 		$scope.canvas.closePath();
 		$scope.canvas.lineWidth = 2;
@@ -302,11 +312,9 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 					$scope.field.color[message.point.x][message.point.y] = message.player;
 					$scope.current_player = ($scope.current_player == 1) ? 2 : 1;
 					$scope.score = message.score;
+					$scope.field.zones = message.zones;
+					$scope.redrawZones();
 				});
-				break;
-			case 'zone':
-				console.log('ZONA');
-				$scope.drawZone(message.zone);
 				break;
 			case 'gameover':
 				break;
@@ -327,7 +335,7 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 	$scope.canvasClick = function(event)
 	{
 		//console.log(event.offsetX, event.offsetY);
-		$scope.doMove(Math.abs(Math.round((event.offsetY - $scope.offsetY) / $scope.ceilHeigth)), Math.abs(Math.round((event.offsetX - $scope.offsetX) / $scope.ceilWidth)));
+		$scope.doMove(Math.abs(Math.round((event.offsetY - $scope.offsetY) / $scope.ceilheight)), Math.abs(Math.round((event.offsetX - $scope.offsetX) / $scope.ceilWidth)));
 	}
 	$scope.doMove = function(x, y){
 		console.log(x, y);
