@@ -221,7 +221,7 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 				break;
 			default:
 				console.log('Unknown message type:' + message.type);
-		}
+		};
 	};
 
 	$scope.subscription = $scope.pubsub.subscribe('/game/queue', $scope.onQueueMessage);
@@ -247,40 +247,72 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 	$scope.channel = $routeParams.channel;
 	$scope.player = 0; //0 - spectator
 	$scope.current_player = 1;
-	$scope.field = {width: 39, heigth: 32, color: [], active: [], connect: []};
-	for(var i = 0; i < $scope.field.heigth; i++)
+	$scope.score = [0, 0, 0];
+	$scope.field = {};
+	$.get(server + '/gameData', {id: $scope.$storage.auth.id, token: $scope.$storage.auth.token, channel: $scope.channel} , function(data) { //get current game
+		$scope.$apply(function(){
+			$scope.field = JSON.parse(data.field);
+			for(var i = 0; i < $scope.field.zones.length; i++)
+			{
+				$scope.drawZone($scope.field.zones[i]);
+			}
+			if(data.player_1 == $scope.$storage.auth.id)
+				$scope.player = 1;
+			else if(data.player_2 == $scope.$storage.auth.id)
+				$scope.player = 2;
+			$scope.current_player = data.current_player;
+			$scope.score[1] = data.score_1;
+			$scope.score[2] = data.score_2;
+		});
+	}, 'JSON');
+
+	$scope.canvas = $('#field_canvas')[0].getContext('2d');
+	$scope.offsetX = 13;
+	$scope.offsetY = 7;
+	$scope.ceilWidth = 21;
+	$scope.ceilHeigth = 21;
+	$scope.drawZone = function(zone)
 	{
-		$scope.field.color[i] = [];
-		$scope.field.active[i] = [];
-		for(var j = 0; j < $scope.field.width; j++)
+		$scope.canvas.beginPath();
+		var offx = 5;
+		var offy = 12;
+		$scope.canvas.moveTo(offy + zone[0].y * $scope.ceilWidth, offx + zone[0].x * $scope.ceilHeigth);
+		for(var i = 1; i < zone.length; i++)
 		{
-			$scope.field.color[i][j] = 0;
-			$scope.field.active[i][j] = 1;
+			$scope.canvas.lineTo(offy + zone[i].y * $scope.ceilWidth, offx + zone[i].x * $scope.ceilHeigth); //remember, that x points at row and y points at column!!!
 		}
-	}
+		$scope.canvas.closePath();
+		$scope.canvas.lineWidth = 2;
+      	$scope.canvas.strokeStyle = 'black';
+      	$scope.canvas.stroke();
+      	$scope.canvas.fillStyle = 'rgba(0, 0, 0, 0.3)';
+      	$scope.canvas.fill();
+	};
+
 	$scope.onGameMessage = function(message){
 		switch(message.type)
 		{
 			case 'heartbeat':
-				if(message.id == $scope.$storage.auth.id)
-					$scope.player = message.player;
 				break;
 			case 'request':
 				break;
 			case 'move':
 				console.log('mov');
 				$scope.$apply(function(){
-					$scope.field.color[message.x][message.y] = message.player;
+					$scope.field.color[message.point.x][message.point.y] = message.player;
 					$scope.current_player = ($scope.current_player == 1) ? 2 : 1;
+					$scope.score = message.score;
 				});
 				break;
 			case 'zone':
+				console.log('ZONA');
+				$scope.drawZone(message.zone);
 				break;
 			case 'gameover':
 				break;
 			default:
 				console.log('Unknown message type:' + message.type);
-		}
+		};
 	};
 	$scope.subscription = $scope.pubsub.subscribe('/game/' + $scope.channel, $scope.onGameMessage);
 
@@ -292,10 +324,15 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 	}, 5000);
 	$scope.iamalive(); //because interval executes only after some time
 
+	$scope.canvasClick = function(event)
+	{
+		//console.log(event.offsetX, event.offsetY);
+		$scope.doMove(Math.abs(Math.round((event.offsetY - $scope.offsetY) / $scope.ceilHeigth)), Math.abs(Math.round((event.offsetX - $scope.offsetX) / $scope.ceilWidth)));
+	}
 	$scope.doMove = function(x, y){
-		//console.log(x, y);
-		if($scope.current_player == $scope.player && $scope.field.active[x][y])
-			$scope.pubsub.publish('/game/' + $scope.channel, {type: 'move', x: x, y: y});
+		console.log(x, y);
+		if($scope.current_player == $scope.player && !$scope.field.color[x][y] && !$scope.field.captured[x][y])
+			$scope.pubsub.publish('/game/' + $scope.channel, {type: 'move', point: {x: x, y: y}});
 	}
 
 }]);

@@ -1,5 +1,14 @@
+<div id="current_player" ng-attr-class="{{'color_' + current_player}}">
+	<span ng-show="current_player == player">Ваш ход</span>
+	<span ng-show="current_player != player">Ход соперника</span>
+</div>
+<div id="scores">
+	<div id="score_1">{{score[1]}}</div>
+	<div id="score_2">{{score[2]}}</div>
+</div>
 <div id="game_field">
 	<div class="row" ng-repeat = "row in field.color track by $index">
-		<span class="point" ng-repeat = "point in row track by $index"><span class="{{'color_' + point}}" ng-click="doMove($parent.$index, $index)">&bull;</span></span>
+		<span class="point" ng-repeat = "point in row track by $index"><span ng-attr-class="{{'color_' + point}}"></span></span>
 	</div>
+	<canvas id='field_canvas' ng-click="canvasClick($event)" width="815" height="670"></canvas>
 </div>

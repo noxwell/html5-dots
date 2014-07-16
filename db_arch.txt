@@ -21,6 +21,9 @@
  -channel
  -field
  -player_1
+ -score_1
  -timestamp_1
  -player_2
+ -score_2
  -timestamp_2
+ -current_player
