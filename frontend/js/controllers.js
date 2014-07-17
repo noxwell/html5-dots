@@ -251,10 +251,10 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 	$scope.canvas = $('#field_canvas')[0].getContext('2d');
 	$scope.canvasWidth = $('#field_canvas')[0].width;
 	$scope.canvasHeight = $('#field_canvas')[0].height;
-	$scope.offsetX = 13;
-	$scope.offsetY = 7;
+	$scope.offsetX = 4;
+	$scope.offsetY = 4;
 	$scope.ceilWidth = 21;
-	$scope.ceilheight = 21;
+	$scope.ceilHeight = 21;
 
 	$scope.requestedDraw = false;
 	$scope.requestedSurrender = false;
@@ -265,6 +265,7 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 	$.get(server + '/gameData', {id: $scope.$storage.auth.id, token: $scope.$storage.auth.token, channel: $scope.channel} , function(data) { //get current game
 		$scope.$apply(function(){
 			$scope.field = JSON.parse(data.field);
+			$scope.redrawField();
 			$scope.redrawZones();
 			if(data.player_1 == $scope.$storage.auth.id)
 				$scope.player = 1;
@@ -278,26 +279,61 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 
 	$scope.redrawZones = function()
 	{
-		$scope.canvas.clearRect(0, 0, $scope.canvasWidth, $scope.canvasHeight);
 		for(var i = 0; i < $scope.field.zones.length; i++)
 		{
 			$scope.drawZone($scope.field.zones[i]);
 		}
 	}
 
+	$scope.redrawField = function()
+	{
+		$scope.canvas.clearRect(0, 0, $scope.canvasWidth, $scope.canvasHeight);
+		for(var i = 0; i < $scope.field.height; i++)
+		{
+			$scope.canvas.beginPath();
+			$scope.canvas.moveTo(0, $scope.offsetY + i * $scope.ceilHeight);
+      		$scope.canvas.lineTo($scope.canvasWidth, $scope.offsetY + i * $scope.ceilHeight);
+			$scope.canvas.closePath();
+			$scope.canvas.lineWidth = 2;
+			$scope.canvas.strokeStyle = 'rgb(217, 210, 245)';
+      		$scope.canvas.stroke();
+		}
+		for(var i = 0; i < $scope.field.width; i++)
+		{
+			$scope.canvas.beginPath();
+			$scope.canvas.moveTo($scope.offsetX + i * $scope.ceilWidth, 0);
+      		$scope.canvas.lineTo($scope.offsetX + i * $scope.ceilWidth, $scope.canvasHeight);
+			$scope.canvas.closePath();
+			$scope.canvas.lineWidth = 2;
+			$scope.canvas.strokeStyle = 'rgb(217, 210, 245)';
+      		$scope.canvas.stroke();
+		}
+		for(var i = 0; i < $scope.field.height; i++)
+		{
+			for(var j = 0; j < $scope.field.width; j++)
+			{
+				if($scope.field.color[i][j] != 0)
+				{
+					$scope.canvas.beginPath();
+					$scope.canvas.arc($scope.offsetX + j * $scope.ceilWidth, $scope.offsetY + i * $scope.ceilHeight, 4, 0, 2 * Math.PI, false);
+					$scope.canvas.fillStyle = ($scope.field.color[i][j] == 1) ? 'red' : 'blue';
+					$scope.canvas.fill();
+				}
+			}
+		}
+	}
+
 	$scope.drawZone = function(zone)
 	{
 		$scope.canvas.beginPath();
-		var offx = 5;
-		var offy = 12;
-		$scope.canvas.moveTo(offy + zone[0].y * $scope.ceilWidth, offx + zone[0].x * $scope.ceilheight);
+		$scope.canvas.moveTo($scope.offsetX + zone[0].y * $scope.ceilWidth, $scope.offsetY + zone[0].x * $scope.ceilHeight);
 		for(var i = 1; i < zone.length; i++)
 		{
-			$scope.canvas.lineTo(offy + zone[i].y * $scope.ceilWidth, offx + zone[i].x * $scope.ceilheight); //remember, that x points at row and y points at column!!!
+			$scope.canvas.lineTo($scope.offsetX + zone[i].y * $scope.ceilWidth, $scope.offsetY + zone[i].x * $scope.ceilHeight); //remember, that x points at row and y points at column!!!
 		}
 		$scope.canvas.closePath();
 		$scope.canvas.lineWidth = 2;
-      	$scope.canvas.strokeStyle = 'black';
+      	$scope.canvas.strokeStyle = ($scope.field.captured[zone[0].x][zone[0].y] == 1) ? 'red' : 'blue';
       	$scope.canvas.stroke();
       	$scope.canvas.fillStyle = 'rgba(0, 0, 0, 0.3)';
       	$scope.canvas.fill();
@@ -364,6 +400,8 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 					$scope.current_player = ($scope.current_player == 1) ? 2 : 1;
 					$scope.score = message.score;
 					$scope.field.zones = message.zones;
+					$scope.field.captured = message.captured;
+					$scope.redrawField();
 					$scope.redrawZones();
 				});
 				break;
@@ -389,7 +427,7 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 	$scope.canvasClick = function(event)
 	{
 		//console.log(event.offsetX, event.offsetY);
-		$scope.doMove(Math.abs(Math.round((event.offsetY - $scope.offsetY) / $scope.ceilheight)), Math.abs(Math.round((event.offsetX - $scope.offsetX) / $scope.ceilWidth)));
+		$scope.doMove(Math.abs(Math.round((event.offsetY - $scope.offsetY) / $scope.ceilHeight)), Math.abs(Math.round((event.offsetX - $scope.offsetX) / $scope.ceilWidth)));
 	}
 	$scope.doMove = function(x, y){
 		console.log(x, y);

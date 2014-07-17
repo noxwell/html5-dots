@@ -10,6 +10,7 @@ var app = express();
 var server = http.createServer(app);
 var db = redis.createClient(6379, 'acm.tpu.ru');
 var bayeux = new faye.NodeAdapter({mount: '/game', timeout: 45});
+var ajax = 'file://';
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -17,7 +18,7 @@ function onAuth(request, response)
 {
 	var name = request.param('name');
 	var password = request.param('password');
-	response.setHeader('Access-Control-Allow-Origin', 'file://');
+	response.setHeader('Access-Control-Allow-Origin', ajax);
 	db.hget('users', name, function(err, id){
 		if(err) throw err;
 		if(id == null)
@@ -58,7 +59,7 @@ function checkAuth(auth, succ, fail)
 
 function getQueue(request, response)
 {
-	response.setHeader('Access-Control-Allow-Origin', 'file://');
+	response.setHeader('Access-Control-Allow-Origin', ajax);
 	var auth = {id: request.param('id'), token: request.param('token')}
 	checkAuth(auth, function(){ //authorized
 		db.sort('queue', 'by', 'user:*->rating', 'get', '#', 'get', 'user:*->name', 'get', 'user:*->rating', function(err, reply){
@@ -78,7 +79,7 @@ function getQueue(request, response)
 
 function getGameData(request, response)
 {
-	response.setHeader('Access-Control-Allow-Origin', 'file://');
+	response.setHeader('Access-Control-Allow-Origin', ajax);
 	var auth = {id: request.param('id'), token: request.param('token')};
 	checkAuth(auth, function(){
 		var channel = request.param('channel');
@@ -437,6 +438,7 @@ function doMove(message, callback, game_id, field, point)
 	findZones(message, field, message.data.player);
 	findZones(message, field, 3 - message.data.player);
 	message.data.zones = field.zones;
+	message.data.captured = field.captured;
 	updateScores(field);
 	message.data.score = [0, field.score_1, field.score_2];
 	db.hmset('game:' + game_id, 'current_player', ((message.data.player == 1) ? 2 : 1), 'field', JSON.stringify(field));
@@ -474,7 +476,7 @@ function updateRatings(game, winner)
 				var s2 = 1;
 			}
 			var new_rating_1 = Math.round(rating_1 + eloCoefficient(rating_1) * (s1 - e1));
-			var new_rating_2 = Math.round(ating_2 + eloCoefficient(rating_2) * (s2 - e2));
+			var new_rating_2 = Math.round(rating_2 + eloCoefficient(rating_2) * (s2 - e2));
 			db.hset('user:' + game.player_1, 'rating', new_rating_1);
 			db.hset('user:' + game.player_2, 'rating', new_rating_2);
 		});

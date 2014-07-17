@@ -66,9 +66,9 @@
 
 #game_field
 {
-	background: url('../img/bg.png') repeat;
+	/*background: url('../img/bg.png') repeat;
 	background-position-x: 4px;
-	background-position-y: 4px;
+	background-position-y: 4px;*/
 	position: absolute;
 	top: 50px;
 	left: 50%;
@@ -81,9 +81,9 @@
 
 #field_canvas
 {
-	position: relative;
+	/*position: relative;
 	top: -672px;
-	left: -7px;
+	left: -7px;*/
 	z-index: 10;
 }
 

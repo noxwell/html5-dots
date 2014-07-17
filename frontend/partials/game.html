@@ -7,10 +7,7 @@
 	<div id="score_2">{{score[2]}}</div>
 </div>
 <div id="game_field">
-	<div class="row" ng-repeat = "row in field.color track by $index">
-		<span class="point" ng-repeat = "point in row track by $index"><span ng-attr-class="{{'color_' + point}}"></span></span>
-	</div>
-	<canvas id='field_canvas' ng-click="canvasClick($event)" width="815" height="670"></canvas>
+	<canvas id='field_canvas' ng-click="canvasClick($event)" width="806" height="660"></canvas>
 </div>
 <div id="control_panel">
 	<button ng-click="requestDraw()">Запросить ничью</button>
