@@ -5,7 +5,8 @@
 var app = angular.module('dots', [
 	'ngRoute',
 	'ngStorage',
-	'dots.controllers'
+	'dots.controllers',
+	'dots.directives'
 ]);
 
 app.config(function($routeProvider) {

@@ -102,64 +102,30 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 	$scope.timeLeft = 0;
 	$scope.waitingAccept = false;
 	$scope.acceptingRequest = false;
-	$scope.requestDeclined = function(timeout){
-		timeout = (typeof timeout !== 'undefined') ?  timeout : true;
-		if($scope.waitingAccept)
-		{
-			console.log(timeout ? 'request timeout' : 'request cancelled');
-			$scope.waitingAccept = false;
-		}
-		else if($scope.acceptingRequest)
-		{
-			console.log(timeout ? 'answer timeout' : 'request cancelled');
-			$scope.acceptingRequest = false;
-		}
-	};
-
-	$scope.countdown = null;
-	$scope.startCountdown = function(time, timeout){
-		$scope.$apply(function(){
-			$scope.timeLeft = time;
-		});
-		$scope.countdown = $interval(function(){
-			$scope.timeLeft--;
-			if($scope.timeLeft == 0)
-				timeout();
-		}, 1000, time, true);
-	};
-	$scope.stopCountdown = function(){
-		$scope.$apply(function(){
-			$scope.timeLeft = 0;
-			$interval.cancel($scope.countdown);
-		});
-	};
+	$scope.requestDetails = {name: '', rating: ''};
+	$scope.requestDeclined = false;
 
 	$scope.requestGame = function(id)
 	{
 		$scope.pubsub.publish('/game/queue', {type: 'request', target: id});
 	};
 
-	$scope.acceptGame = function()
+	$scope.acceptRequest = function()
 	{
 		$scope.pubsub.publish('/game/queue', {type: 'accept', target: $scope.acceptingRequest});
 	};
 
+	$scope.declineRequest = function()
+	{
+		var init = $scope.acceptingRequest;
+		var target = $scope.$storage.auth.id;
+		$scope.pubsub.publish('/game/queue', {type: 'decline', init: init, target: target});
+	}
+
 	$scope.cancelRequest = function()
 	{
-		if($scope.waitingAccept)
-		{
-			var init = $scope.$storage.auth.id;
-			var target = $scope.waitingAccept;
-		}
-		else if($scope.acceptingRequest)
-		{
-			var init = $scope.acceptingRequest;
-			var target = $scope.$storage.auth.id;
-		}
-		else
-		{
-			return;
-		}
+		var init = $scope.$storage.auth.id;
+		var target = $scope.waitingAccept;
 		$scope.pubsub.publish('/game/queue', {type: 'decline', init: init, target: target});
 	};
 
@@ -179,36 +145,42 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 				if(message.id == $scope.$storage.auth.id)
 				{
 					console.log('I wanna play game with', message.target);
-					$scope.waitingAccept = message.target;
-					$scope.startCountdown(15, $scope.requestDeclined);
+					$scope.$apply(function(){
+						$scope.waitingAccept = message.target;
+					});
 				}
 				else if(message.target == $scope.$storage.auth.id)
 				{
 					console.log(message.id, 'wants play game with me');
-					$scope.acceptingRequest = message.id;
-					$scope.startCountdown(15, $scope.requestDeclined);
+					$scope.$apply(function(){
+						$scope.requestDetails = message.user;
+						$scope.acceptingRequest = message.id;
+					});
 				}
 				break;
 			case 'accept':
 				if(message.id == $scope.$storage.auth.id)
 				{
 					console.log('I accepted game with', message.target);
-					$scope.acceptingRequest = false;
-					$scope.stopCountdown();
+					$scope.$apply(function(){
+						$scope.acceptingRequest = false;
+					});
 				}
 				else if(message.target == $scope.$storage.auth.id)
 				{
 					console.log(message.id, ' accepted my game');
-					$scope.waitingAccept = false;
-					$scope.stopCountdown();
+					$scope.$apply(function(){
+						$scope.waitingAccept = false;
+					});
 				}
 				break;
 			case 'decline':
 				if(message.init == $scope.$storage.auth.id && message.target == $scope.waitingAccept || 
 					message.init == $scope.acceptingRequest && message.target == $scope.$storage.auth.id )
 				{
-					$scope.requestDeclined(false); //it is not timeout
-					$scope.stopCountdown();
+					$scope.$apply(function(){
+						$scope.requestDeclined = true;
+					});
 				}
 				break;
 			case 'new_game':
@@ -237,13 +209,39 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 	$scope.$on('$destroy', function(){
 		$scope.leaveChannel('/game/queue');
 		$scope.subscription.cancel();
-		if($scope.countdown != null)
-			$interval.cancel($scope.countdown);
 		$interval.cancel($scope.heartbeat);
 	});
+
+
+
+	//////////////
+	$scope.viewCountdown = false;
+	$scope.testFailure = false;
+	$scope.runTest = function()
+	{
+		$scope.viewCountdown = true;
+	}
+	$scope.setFailure = function()
+	{
+		$scope.testFailure = "FAIL!!!";
+	}
+	$scope.accept = function()
+	{
+		console.log('accept');
+	}
+	$scope.decline = function()
+	{
+		console.log('decline');
+	}
+	$scope.cancel = function()
+	{
+		console.log('cancel');
+	}
 }]);
 
 controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams', '$interval', function($scope, $location, $routeParams, $interval) {
+	if($scope.$storage.loggedIn == false) 
+		$location.path('/login');
 	$scope.channel = $routeParams.channel;
 	$scope.player = 0; //0 - spectator
 	$scope.current_player = 1;
@@ -257,6 +255,12 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 	$scope.offsetY = 7;
 	$scope.ceilWidth = 21;
 	$scope.ceilheight = 21;
+
+	$scope.requestedDraw = false;
+	$scope.requestedSurrender = false;
+	$scope.acceptingRequest = false;
+	$scope.waitingAccept = false;
+	$scope.requestDeclined = false;
 
 	$.get(server + '/gameData', {id: $scope.$storage.auth.id, token: $scope.$storage.auth.token, channel: $scope.channel} , function(data) { //get current game
 		$scope.$apply(function(){
@@ -299,12 +303,59 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
       	$scope.canvas.fill();
 	};
 
+	$scope.requestDraw = function(){
+		console.log('request_d');
+		$scope.pubsub.publish('/game/' + $scope.channel, {type: 'request', requestType: 'draw'});
+	};
+
+	$scope.requestSurrender = function(){
+		$scope.pubsub.publish('/game/' + $scope.channel, {type: 'request', requestType: 'surrender'});
+	};
+
+	$scope.acceptRequest = function(){
+		$scope.pubsub.publish('/game/' + $scope.channel, {type: 'accept', requestType: ($scope.requestedDraw ? 'draw' : 'surrender')});
+	};
+
+	$scope.declineRequest = function(){
+		$scope.pubsub.publish('/game/' + $scope.channel, {type: 'decline', init: (3 - $scope.player), target: $scope.player});
+	};
+
+	$scope.cancelRequest = function(){
+		$scope.pubsub.publish('/game/' + $scope.channel, {type: 'decline', init: $scope.player, target: (3 - $scope.player)});
+	};
+
+	$scope.quitGame = function(){
+
+	};
+
 	$scope.onGameMessage = function(message){
 		switch(message.type)
 		{
 			case 'heartbeat':
 				break;
 			case 'request':
+				$scope.$apply(function(){
+					$scope.requestedDraw = (message.requestType == 'draw');
+					$scope.requestedSurrender = (message.requestType == 'surrender');
+					$scope.waitingAccept = (message.player == $scope.player);
+					$scope.acceptingRequest = (message.player == (3 - $scope.player));
+				});
+				break;
+			case 'accept':
+				$scope.$apply(function(){
+					$scope.requestedDraw = false;
+					$scope.requestedSurrender = false;
+					$scope.waitingAccept = false;
+					$scope.acceptingRequest = false;
+				});
+				break;
+			case 'decline':
+				if(message.player != $scope.player)
+				{
+					$scope.$apply(function(){
+						$scope.requestDeclined = true;
+					});
+				}
 				break;
 			case 'move':
 				console.log('mov');
@@ -317,6 +368,9 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 				});
 				break;
 			case 'gameover':
+				$scope.$apply(function(){
+					$location.path('/queue');
+				});
 				break;
 			default:
 				console.log('Unknown message type:' + message.type);

@@ -11,7 +11,7 @@
 -ZSET requests
  -user_id => timestamp
 -request:id
- -type (newgame, draw, stopgame)
+ -type (newgame, draw, surrender)
  -gameid
  -target
 -HSET games

@@ -105,7 +105,7 @@ function kickPlayer(id)
 	bayeux.getClient().publish('/game/queue', {type: 'quit', id: id});
 }
 
-function addRequest(id, message, callback)
+function addRequest(id, type, target, message, callback)
 {
 	db.zscore('requests', id, function(err, reply){
 		if(reply != null && reply > timestamp() - 15) //user already requested something
@@ -115,7 +115,7 @@ function addRequest(id, message, callback)
 		else
 		{
 			db.zadd('requests', timestamp(), id);
-			db.hmset('request:' + id, 'type', 'newgame', 'target', message.data.target);
+			db.hmset('request:' + id, 'type', type, 'target', target);
 		}
 		callback(message);
 	});
@@ -155,10 +155,10 @@ function emptyField()
 
 function createGame(player_1, player_2, message, callback)
 {
-	db.zscore('requests', player_1, function(err, reply){
-		if(reply == null || reply < timestamp() - 15)
+	db.hget('request:' + player_1, 'target', function(err, reply){
+		if(reply == null || reply != player_2)
 		{
-			message.error = '406::Nothing to accept';
+			message.error = '406::Not allowed';
 		}
 		else
 		{
@@ -191,7 +191,7 @@ function emptyArea(height, width)
 
 function fillArea(area, field, point, color)
 {
-	if(point.x < 0 || point.x >= field.height || point.y < 0 || point.y >= field.width || area[point.x][point.y] || field.color[point.x][point.y] == color)
+	if(point.x < 0 || point.x >= field.height || point.y < 0 || point.y >= field.width || area[point.x][point.y] || (field.color[point.x][point.y] == color && field.captured[point.x][point.y] != (3 - color)))
 		return;
 	area[point.x][point.y] = 1;
 	for(var i = 0; i < neighbours.length; i += 2) //we don't need corners
@@ -443,6 +443,61 @@ function doMove(message, callback, game_id, field, point)
 	callback(message);
 }
 
+function eloCoefficient(rating)
+{
+	var res = 10;
+	if(rating < 2400)
+		res = 15;
+	if(rating < 1700)
+		res = 25;
+	return res;
+}
+
+function updateRatings(game, winner)
+{
+	db.hget('user:' + game.player_1, 'rating', function(err, rating_1){
+		db.hget('user:' + game.player_2, 'rating', function(err, rating_2){
+			rating_1 = Number(rating_1);
+			rating_2 = Number(rating_2);
+			var e1 = 1.0 / (1.0 + Math.pow(10, (rating_2 - rating_1) / 400.0));
+			var e2 = 1.0 / (1.0 + Math.pow(10, (rating_1 - rating_2) / 400.0));
+			var s1 = 0.5;
+			var s2 = 0.5
+			if(winner == 1)
+			{
+				var s1 = 1;
+				var s2 = 0;
+			}
+			else if(winner == 2)
+			{
+				var s1 = 0;
+				var s2 = 1;
+			}
+			var new_rating_1 = Math.round(rating_1 + eloCoefficient(rating_1) * (s1 - e1));
+			var new_rating_2 = Math.round(ating_2 + eloCoefficient(rating_2) * (s2 - e2));
+			db.hset('user:' + game.player_1, 'rating', new_rating_1);
+			db.hset('user:' + game.player_2, 'rating', new_rating_2);
+		});
+	});
+}
+
+function gameOver(game_id, game, draw, message, callback)
+{
+	var winner;
+	if(game.score_1 == game.score_2 || draw)
+		winner = 0;
+	else if(game.score_1 > game.score_2)
+		winner = 1;
+	else
+		winner = 2;
+	var rating = [0, 0];
+	updateRatings(game, winner);
+	bayeux.getClient().publish('/game/' + game.channel, {type: 'gameover', id: 0, score_1: game.score_1, score_2: game.score_2, winner: winner});
+	db.hdel('games', game.channel);
+	db.del('game:' + game_id);
+	callback(message);
+}
+
 function gameChannel(channel, id, message, callback)
 {
 	db.hget('games', channel, function(err, game_id){
@@ -452,12 +507,19 @@ function gameChannel(channel, id, message, callback)
 			callback(message);
 		}
 		db.hgetall('game:' + game_id, function(err, game){
+			if(game == null)
+			{
+				message.error = '404::Game not found';
+				return callback(message);
+			}
 			if(game.player_1 == id)
 				message.data.player = 1;
 			else if (game.player_2 == id)
 				message.data.player = 2;
 			else
 				message.data.player = 0;
+
+			var other_player = 3 - message.data.player;
 
 			game.field = JSON.parse(game.field);
 
@@ -472,6 +534,37 @@ function gameChannel(channel, id, message, callback)
 					message.error = '406::Not allowed';
 				else
 					return doMove(message, callback, game_id, game.field, message.data.point);
+			}
+
+			if(message.data.type == 'request')
+			{
+				if(message.data.player != 0 && (message.data.requestType == 'draw' || message.data.requestType == 'surrender'))
+				{
+					return addRequest(game['player_' + message.data.player], message.data.requestType, game['player_' + other_player], message, callback);
+				}
+			}
+
+			if(message.data.type == 'accept')
+			{
+				if(message.data.player != 0)
+				{
+					return db.hget('request:' + game['player_' + other_player], 'target', function(err, reply){
+						if(reply == null || reply != game['player_' + message.data.player])
+						{
+							message.error = '406::Not allowed';
+							return callback(message);
+						}
+						gameOver(id, game, (message.data.requestType == 'draw'), message, callback);
+					});
+				}
+			}
+
+			if(message.data.type == 'decline')
+			{
+				if(message.data.player != 0)
+				{
+					return cancelRequest(game['player_' + message.data.init], game['player_' + message.data.target], message, callback);
+				}
 			}
 
 			callback(message);
@@ -549,9 +642,8 @@ bayeux.addExtension({
 
 			if(message.channel == '/game/queue' && message.data.type == 'request')
 			{
-				message.data.name = user.name;
-				message.data.rating = user.rating;
-				return addRequest(auth.id, message, callback);
+				message.data.user = {name: user.name, rating: user.rating};
+				return addRequest(auth.id, 'newgame', message.data.target, message, callback);
 			}
 
 			if(message.channel == '/game/queue' && message.data.type == 'accept')

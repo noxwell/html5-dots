@@ -3,7 +3,6 @@
     {{user.name}}
     <p>id: {{user.id}}, rating: {{user.rating}}</p>
   </li>
-  <h1 ng-show="timeLeft > 0">{{timeLeft}}</h1>
-  <button ng-show="acceptingRequest" ng-click="acceptGame()">Принять игру</button>
-  <button ng-show="acceptingRequest || waitingAccept" ng-click="cancelRequest()">Отклонить игру</button>
 </ul>
+<countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от игры с вами." timeout="Время ожидания соперника истекло.">Игрок {{requestDetails.name}} (рейтинг {{requestDetails.rating}}) хочет сыграть с вами</countdown>
+<countdown ng-show="waitingAccept" time="15" on-cancel="cancelRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от игры с вами" timeout="Время ожидания истекло.">Ожидание соперника...</countdown>

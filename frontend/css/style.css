@@ -86,3 +86,13 @@
 	left: -7px;
 	z-index: 10;
 }
+
+#control_panel
+{
+	position: relative;
+	top: 370px;
+	clear: both;
+	float: left;
+	display: block;
+	z-index: 20;
+}
