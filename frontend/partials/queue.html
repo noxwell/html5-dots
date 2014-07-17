@@ -1,3 +1,5 @@
+<h4>Очередь ожидания</h4>
+<span id="no_queue" ng-show="queue.length == 0">Никого нет онлайн</span>
 <ul class="queue">
   <li ng-repeat="user in queue" ng-click="requestGame(user.id)">
     {{user.name}}

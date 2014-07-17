@@ -1,0 +1,17 @@
+<h4>Регистрация</h4>
+<form name="registrationForm">
+	<span ng-show="success" id="registration_success">
+		Вы успешно зарегистрировались! Вы можете перейти на <a href="#/login">страницу входа</a>
+		<br><br>
+	</span>
+	<span ng-show="failure" id="registration_failure">
+		<span ng-show="alreadyExists">Данное имя пользователя уже существует!<br></span>
+		<span ng-show="registrationForm.password.$error.minlength">Пароль должен содержать не меньше 6 символов!<br></span>
+		<br>
+	</span>
+	Имя пользователя: <input type="text" name="name" ng-model="name" required>
+	<br>
+	Пароль: <input type="password" name="password" ng-minlength="6" ng-model="password" required>
+	<br>
+	<button ng-click="register()">Зарегистрироваться</button>
+</form>

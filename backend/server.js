@@ -57,6 +57,29 @@ function checkAuth(auth, succ, fail)
 	});
 }
 
+function onRegister(request, response)
+{
+
+	var name = request.param('name');
+	var password = request.param('password');
+	response.setHeader('Access-Control-Allow-Origin', ajax);
+	db.hget('users', name, function(err, id){
+		if(err) throw err;
+		if(id != null)
+		{
+			response.status(406).send('Already exists');
+		}
+		else
+		{
+			db.incr('last_userid', function(err, user_id){
+				db.hset('users', name, user_id);
+				db.hmset('user:' + user_id, 'name', name, 'password', password, 'token', '', 'rating', '1600');
+				response.send('OK!');
+			});
+		}
+	});
+}
+
 function getQueue(request, response)
 {
 	response.setHeader('Access-Control-Allow-Origin', ajax);
@@ -575,6 +598,7 @@ function gameChannel(channel, id, message, callback)
 }
 
 app.post('/auth', onAuth);
+app.post('/register', onRegister);
 app.get('/queue', getQueue);
 app.get('/gameData', getGameData);
 
@@ -678,6 +702,7 @@ function garbageCollector()
 			kickPlayer(result[i]);
 		}
 	});
+	db.zremrangebyscore('queue', '-inf', timestamp() - 10);
 
 	//find outdated requests
 	db.zrangebyscore('requests', '-inf', timestamp() - 15, function(err, result){

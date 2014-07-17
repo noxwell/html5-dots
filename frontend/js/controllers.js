@@ -22,7 +22,7 @@ controllers.controller('appCtrl', ['$scope', '$localStorage', '$location', funct
 		}
 	});
 
-	$scope.pubsub = new Faye.Client('http://localhost:8888/game');
+	$scope.pubsub = new Faye.Client(server + '/game');
 	$scope.leaveChannel = function(channel){
 		$scope.pubsub.publish(channel, {type: 'quit'});
 	};
@@ -40,27 +40,54 @@ controllers.controller('appCtrl', ['$scope', '$localStorage', '$location', funct
 }]);
 
 controllers.controller('loginFormCtrl', ['$scope', '$location', function($scope, $location) {
+	$scope.failure = false;
 	$scope.login = function() {
 		$.post(server + '/auth', {name: $scope.name, password: $scope.password}, function(data)	{
 			$scope.$apply(function(){
+				$scope.failure = false;
 				$scope.$parent.$storage.user.name = $scope.name;
 				$scope.$parent.$storage.auth = {id: data.id, token: data.token};
 				$scope.$parent.$storage.loggedIn = true;
 				$location.path('/queue');
 			}, 'JSON');
+		}).fail(function(){
+			$scope.failure = true;
 		});
 	};
 }]);
 
 controllers.controller('registrationFormCtrl', ['$scope', '$location', function($scope, $location) {
-	
+	$scope.success = false;
+	$scope.failure = false;
+	$scope.alreadyExists = false;
+	$scope.name = '';
+	$scope.password = '';
+	$scope.register = function(){
+		if($scope.registrationForm.name.$valid && $scope.registrationForm.password.$valid)
+		{
+			$.post(server + '/register', {name: $scope.name, password: $scope.password}, function(data)	{
+				$scope.$apply(function(){
+					$scope.failure = false;
+					$scope.alreadyExists = false;
+					$scope.success = true;
+				}, 'JSON');
+			}).fail(function(){
+				$scope.failure = true;
+				$scope.alreadyExists = true;
+			});
+		}
+		else
+		{
+			$scope.failure = true;
+		}
+	};
 }]);
 
 controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', function($scope, $location, $interval) {
 	if($scope.$storage.loggedIn == false) 
 		$location.path('/login');
 	$scope.queue = [];
-	$.get(server + '/queue', $scope.$storage.auth, function(data) { //get cuurrent queue
+	$.get(server + '/queue', $scope.$storage.auth, function(data) { //get current queue
 		$scope.$apply(function(){
 			$scope.queue = data.queue;
 		});
@@ -211,32 +238,6 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 		$scope.subscription.cancel();
 		$interval.cancel($scope.heartbeat);
 	});
-
-
-
-	//////////////
-	$scope.viewCountdown = false;
-	$scope.testFailure = false;
-	$scope.runTest = function()
-	{
-		$scope.viewCountdown = true;
-	}
-	$scope.setFailure = function()
-	{
-		$scope.testFailure = "FAIL!!!";
-	}
-	$scope.accept = function()
-	{
-		console.log('accept');
-	}
-	$scope.decline = function()
-	{
-		console.log('decline');
-	}
-	$scope.cancel = function()
-	{
-		console.log('cancel');
-	}
 }]);
 
 controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams', '$interval', function($scope, $location, $routeParams, $interval) {
@@ -435,4 +436,9 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 			$scope.pubsub.publish('/game/' + $scope.channel, {type: 'move', point: {x: x, y: y}});
 	}
 
+	$scope.$on('$destroy', function(){
+		$scope.leaveChannel('/game/' + $scope.channel);
+		$scope.subscription.cancel();
+		$interval.cancel($scope.heartbeat);
+	});
 }]);

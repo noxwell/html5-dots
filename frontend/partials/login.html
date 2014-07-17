@@ -1,7 +1,15 @@
+<h4>Вход</h4>
 <form name="loginForm">
+	<span ng-show="failure" id="login_failure">
+		Неправильное имя пользователя/пароль!
+		<br>
+		<br>
+	</span>
 	Имя пользователя: <input type="text" ng-model="name">
 	<br>
-	Пароль: <input type="text" ng-model="password">
+	Пароль: <input type="password" ng-model="password">
 	<br>
 	<button ng-click="login()">Войти</button>
+	<br>
+	<a href="#/register">Зарегистрироваться</a>
 </form>
