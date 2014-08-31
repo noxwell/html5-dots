@@ -1,6 +1,6 @@
 <div id="current_player" ng-attr-class="{{'color_' + current_player}}">
-	<span ng-show="current_player == player">Р’Р°С€ С…РѕРґ</span>
-	<span ng-show="current_player != player">РҐРѕРґ СЃРѕРїРµСЂРЅРёРєР°</span>
+	<span ng-show="current_player == player">Ваш ход</span>
+	<span ng-show="current_player != player">Ход соперника</span>
 </div>
 <div id="scores">
 	<div id="score_1">{{score[1]}}</div>
@@ -10,14 +10,14 @@
 	<canvas id='field_canvas' ng-click="canvasClick($event)" width="806" height="660"></canvas>
 </div>
 <div id="control_panel">
-	<button ng-click="requestDraw()">Р—Р°РїСЂРѕСЃРёС‚СЊ РЅРёС‡СЊСЋ</button>
-	<button ng-click="requestSurrender()">Р—Р°РїСЂРѕСЃРёС‚СЊ РєРѕРЅРµС† РёРіСЂС‹</button>
+	<button ng-click="requestDraw()">Запросить ничью</button>
+	<button ng-click="requestSurrender()">Запросить конец игры</button>
 	<div id="draw_request" ng-show="requestedDraw">
-		<countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="РЎРѕРїРµСЂРЅРёРє РѕС‚РєР°Р·Р°Р»СЃСЏ РѕС‚ РЅРёС‡СЊРё." timeout="Р’СЂРµРјСЏ РѕР¶РёРґР°РЅРёСЏ СЃРѕРїРµСЂРЅРёРєР° РёСЃС‚РµРєР»Рѕ.">РЎРѕРїРµСЂРЅРёРє РїСЂРµРґР»Р°РіР°РµС‚ РІР°Рј РЅРёС‡СЊСЋ.</countdown>
-		<countdown ng-show="waitingAccept" time="15" on-cancel="declineRequest()" is-failure="requestDeclined" failure-message="РЎРѕРїРµСЂРЅРёРє РѕС‚РєР°Р·Р°Р»СЃСЏ РѕС‚ РЅРёС‡СЊРё." timeout="Р’СЂРµРјСЏ РѕР¶РёРґР°РЅРёСЏ РёСЃС‚РµРєР»Рѕ.">РћР¶РёРґР°РЅРёРµ СЃРѕРїРµСЂРЅРёРєР°...</countdown>
+		<countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от ничьи." timeout="Время ожидания соперника истекло.">Соперник предлагает вам ничью.</countdown>
+		<countdown ng-show="waitingAccept" time="15" on-cancel="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от ничьи." timeout="Время ожидания истекло.">Ожидание соперника...</countdown>
 	</div>
 	<div id="surrender_request" ng-show="requestedSurrender">
-		<countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="РЎРѕРїРµСЂРЅРёРє РѕС‚РєР°Р·Р°Р»СЃСЏ РѕС‚ РІС‹С€РµРіРѕ РїСЂРµРґР»РѕР¶РµРЅРёСЏ." timeout="Р’СЂРµРјСЏ РѕР¶РёРґР°РЅРёСЏ СЃРѕРїРµСЂРЅРёРєР° РёСЃС‚РµРєР»Рѕ.">РЎРѕРїРµСЂРЅРёРє РїСЂРµРґР»Р°РіР°РµС‚ РІР°Рј Р·Р°РІРµСЂС€РёС‚СЊ РёРіСЂСѓ СЃ С‚РµРєСѓС‰РёРј СЃС‡РµС‚РѕРј.</countdown>
-		<countdown ng-show="waitingAccept" time="15" on-cancel="declineRequest()" is-failure="requestDeclined" failure-message="РЎРѕРїРµСЂРЅРёРє РѕС‚РєР°Р·Р°Р»СЃСЏ РѕС‚ РЅРёС‡СЊРё." timeout="Р’СЂРµРјСЏ РѕР¶РёРґР°РЅРёСЏ РёСЃС‚РµРєР»Рѕ.">РћР¶РёРґР°РЅРёРµ СЃРѕРїРµСЂРЅРёРєР°...</countdown>
+		<countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от вышего предложения." timeout="Время ожидания соперника истекло.">Соперник предлагает вам завершить игру с текущим счетом.</countdown>
+		<countdown ng-show="waitingAccept" time="15" on-cancel="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от ничьи." timeout="Время ожидания истекло.">Ожидание соперника...</countdown>
 	</div>
 </div>

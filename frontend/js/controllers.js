@@ -42,17 +42,20 @@ controllers.controller('appCtrl', ['$scope', '$localStorage', '$location', funct
 controllers.controller('loginFormCtrl', ['$scope', '$location', function($scope, $location) {
 	$scope.failure = false;
 	$scope.login = function() {
-		$.post(server + '/auth', {name: $scope.name, password: $scope.password}, function(data)	{
-			$scope.$apply(function(){
-				$scope.failure = false;
-				$scope.$parent.$storage.user.name = $scope.name;
-				$scope.$parent.$storage.auth = {id: data.id, token: data.token};
-				$scope.$parent.$storage.loggedIn = true;
-				$location.path('/queue');
-			}, 'JSON');
-		}).fail(function(){
-			$scope.failure = true;
-		});
+		if($scope.loginForm.name.$valid && $scope.loginForm.password.$valid)
+		{
+			$.post(server + '/auth', {name: $scope.name, password: $scope.password}, function(data)	{
+				$scope.$apply(function(){
+					$scope.failure = false;
+					$scope.$parent.$storage.user.name = $scope.name;
+					$scope.$parent.$storage.auth = {id: data.id, token: data.token};
+					$scope.$parent.$storage.loggedIn = true;
+					$location.path('/queue');
+				}, 'JSON');
+			}).fail(function(){
+				$scope.failure = true;
+			});
+		}
 	};
 }]);
 
@@ -72,8 +75,10 @@ controllers.controller('registrationFormCtrl', ['$scope', '$location', function(
 					$scope.success = true;
 				}, 'JSON');
 			}).fail(function(){
-				$scope.failure = true;
-				$scope.alreadyExists = true;
+				$scope.$apply(function(){
+					$scope.failure = true;
+					$scope.alreadyExists = true;
+				});
 			});
 		}
 		else
@@ -126,7 +131,6 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 		});
 	};
 
-	$scope.timeLeft = 0;
 	$scope.waitingAccept = false;
 	$scope.acceptingRequest = false;
 	$scope.requestDetails = {name: '', rating: ''};
@@ -210,7 +214,7 @@ controllers.controller('waitingRoomCtrl', ['$scope', '$location', '$interval', f
 					});
 				}
 				break;
-			case 'new_game':
+			case 'newgame':
 				if(message.player_1 == $scope.$storage.auth.id || message.player_2 == $scope.$storage.auth.id)
 				{
 					$scope.$apply(function(){
@@ -263,7 +267,7 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 	$scope.waitingAccept = false;
 	$scope.requestDeclined = false;
 
-	$.get(server + '/gameData', {id: $scope.$storage.auth.id, token: $scope.$storage.auth.token, channel: $scope.channel} , function(data) { //get current game
+	$.get(server + '/gamedata', {id: $scope.$storage.auth.id, token: $scope.$storage.auth.token, channel: $scope.channel} , function(data) { //get current game
 		$scope.$apply(function(){
 			$scope.field = JSON.parse(data.field);
 			$scope.redrawField();

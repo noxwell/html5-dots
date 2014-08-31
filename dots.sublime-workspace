@@ -4,100 +4,380 @@
 		"selected_items":
 		[
 			[
-				"fo",
-				"font-size"
+				"ca",
+				"callback"
 			],
 			[
-				"f",
-				"function"
+				"pass",
+				"password"
 			],
 			[
-				"margin",
-				"margin-right"
+				"res",
+				"response"
 			],
 			[
-				"c",
-				"channel"
+				"fail",
+				"failure"
 			],
 			[
-				"cu",
-				"cuurrent_player"
+				"fa",
+				"failure"
 			],
 			[
-				"mar",
-				"margin-top"
+				"succ",
+				"success"
 			],
 			[
 				"pa",
-				"padding-left"
+				"password"
 			],
 			[
-				"paddin",
-				"padding-top"
+				"zo",
+				"zone"
 			],
 			[
-				"ma",
-				"margin"
+				"fil",
+				"fillStyle"
 			],
 			[
-				"ac",
-				"active"
-			],
-			[
-				"he",
-				"heigth"
-			],
-			[
-				"w",
+				"wi",
 				"width"
 			],
 			[
-				"te",
-				"timestamp"
+				"he",
+				"height"
+			],
+			[
+				"redra",
+				"redrawField"
+			],
+			[
+				"sc",
+				"scope"
+			],
+			[
+				"pl",
+				"player_2"
+			],
+			[
+				"ra",
+				"rating_2"
 			],
 			[
 				"pla",
 				"player_1"
 			],
 			[
-				"p",
-				"player"
+				"new",
+				"new_rating_1"
+			],
+			[
+				"rati",
+				"rating"
+			],
+			[
+				"d",
+				"draw"
+			],
+			[
+				"w",
+				"winner"
+			],
+			[
+				"sco",
+				"score_1"
 			],
 			[
 				"ga",
 				"game"
 			],
 			[
+				"pal",
+				"player_1"
+			],
+			[
+				"ch",
+				"channel"
+			],
+			[
+				"ge",
+				"game_id"
+			],
+			[
+				"s",
+				"surrender"
+			],
+			[
+				"req",
+				"requestedDraw"
+			],
+			[
 				"re",
-				"reply"
+				"requestType"
 			],
 			[
-				"ca",
-				"callback"
+				"can",
+				"cancelRequest"
 			],
 			[
-				"pl",
-				"player"
+				"o",
+				"other_player"
+			],
+			[
+				"add",
+				"addRequest"
+			],
+			[
+				"type",
+				"type"
+			],
+			[
+				"decline",
+				"decline"
+			],
+			[
+				"co",
+				"console"
+			],
+			[
+				"mar",
+				"margin-top"
+			],
+			[
+				"accept",
+				"acceptingRequest"
+			],
+			[
+				"requ",
+				"request"
+			],
+			[
+				"reque",
+				"request"
+			],
+			[
+				"requestDe",
+				"requestDetails"
+			],
+			[
+				"wa",
+				"waitingAccept"
+			],
+			[
+				"acce",
+				"acceptingRequest"
+			],
+			[
+				"acc",
+				"accept"
+			],
+			[
+				"f",
+				"function"
+			],
+			[
+				"tim",
+				"timeLeft"
+			],
+			[
+				"c",
+				"countdown"
+			],
+			[
+				"t",
+				"timeLeft"
+			],
+			[
+				"time",
+				"timeout	setTimeout function"
+			],
+			[
+				"vi",
+				"viewCountdown"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"fin",
+				"findZones"
+			],
+			[
+				"a",
+				"area"
+			],
+			[
+				"che",
+				"checkLine"
+			],
+			[
+				"li",
+				"line"
+			],
+			[
+				"ar",
+				"areas"
+			],
+			[
+				"bo",
+				"borderLine"
+			],
+			[
+				"ne",
+				"new_current"
+			],
+			[
+				"area",
+				"areas"
+			],
+			[
+				"us",
+				"used"
+			],
+			[
+				"are",
+				"areas"
+			],
+			[
+				"ti",
+				"tin"
+			],
+			[
+				"up",
+				"updateScores"
+			],
+			[
+				"ma",
+				"margin-left"
+			],
+			[
+				"ini",
+				"inline-table"
+			],
+			[
+				"font-",
+				"font-size"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"inl",
+				"inline-block"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"coo",
+				"console"
+			],
+			[
+				"line",
+				"line"
+			],
+			[
+				"k",
+				"k"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"j",
+				"j"
+			],
+			[
+				"is",
+				"isAreaOpen"
+			],
+			[
+				"em",
+				"emptyArea"
+			],
+			[
+				"fi",
+				"field"
+			],
+			[
+				"p",
+				"point"
+			],
+			[
+				"of",
+				"offsetX"
+			],
+			[
+				"le",
+				"length"
+			],
+			[
+				"r",
+				"round"
+			],
+			[
+				"ce",
+				"ceilWidth"
+			],
+			[
+				"zon",
+				"zones"
+			],
+			[
+				"zone",
+				"zone"
+			],
+			[
+				"g",
+				"game_id"
+			],
+			[
+				"cu",
+				"current_player"
+			],
+			[
+				"game",
+				"game"
+			],
+			[
+				"get",
+				"getGame"
+			],
+			[
+				"po",
+				"point"
+			],
+			[
+				"fo",
+				"font-size"
+			],
+			[
+				"margin",
+				"margin-right"
+			],
+			[
+				"paddin",
+				"padding-top"
+			],
+			[
+				"ac",
+				"active"
+			],
+			[
+				"te",
+				"timestamp"
 			],
 			[
 				"log",
 				"log"
 			],
 			[
-				"tim",
-				"timestamp"
-			],
-			[
 				"st",
 				"stopCountdown"
-			],
-			[
-				"ti",
-				"timeout	setTimeout function"
-			],
-			[
-				"requ",
-				"requestDeclined"
 			],
 			[
 				"sto",
@@ -108,52 +388,16 @@
 				"cancelRequest"
 			],
 			[
-				"req",
-				"request"
-			],
-			[
-				"new",
-				"new_game"
-			],
-			[
 				"cr",
 				"createGame"
-			],
-			[
-				"co",
-				"console"
 			],
 			[
 				"e",
 				"error"
 			],
 			[
-				"t",
-				"timestamp"
-			],
-			[
-				"sco",
-				"scope"
-			],
-			[
-				"acce",
-				"acceptGame"
-			],
-			[
-				"acc",
-				"acceptButton"
-			],
-			[
-				"time",
-				"time"
-			],
-			[
 				"timeout",
 				"timeout	setTimeout function"
-			],
-			[
-				"wa",
-				"waitTimer"
 			],
 			[
 				"if",
@@ -162,10 +406,6 @@
 			[
 				"me",
 				"message"
-			],
-			[
-				"le",
-				"leaveChannel"
 			],
 			[
 				"ia",
@@ -184,18 +424,6 @@
 				"server_token"
 			],
 			[
-				"ge",
-				"getClient"
-			],
-			[
-				"r",
-				"reply"
-			],
-			[
-				"d",
-				"data"
-			],
-			[
 				"ue",
 				"user"
 			],
@@ -208,24 +436,12 @@
 				"subscribed"
 			],
 			[
-				"con",
-				"console"
-			],
-			[
 				"un",
 				"unauthorized_message"
 			],
 			[
 				"lo",
 				"localStorage"
-			],
-			[
-				"s",
-				"status"
-			],
-			[
-				"pass",
-				"passwd"
 			],
 			[
 				"body",
@@ -238,10 +454,6 @@
 			[
 				"mi",
 				"mi"
-			],
-			[
-				"i",
-				"i"
 			],
 			[
 				"int",
@@ -268,10 +480,6 @@
 				"lastError"
 			],
 			[
-				"get",
-				"getSamples"
-			],
-			[
 				"marg",
 				"margin-top"
 			],
@@ -292,14 +500,6 @@
 				"raw_input"
 			],
 			[
-				"ra",
-				"raw_input"
-			],
-			[
-				"fa",
-				"fadeOut"
-			],
-			[
 				"hi",
 				"hideOverlay"
 			],
@@ -314,18 +514,6 @@
 			[
 				"fu",
 				"function"
-			],
-			[
-				"bac",
-				"background-color"
-			],
-			[
-				"font",
-				"font-family"
-			],
-			[
-				"n",
-				"n"
 			]
 		]
 	},
@@ -335,15 +523,23 @@
 			"file": "frontend/index.html",
 			"settings":
 			{
-				"buffer_size": 674,
+				"buffer_size": 739,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Volumes/OS/Users/Alexey/Documents/Лабы/TP/1.tex",
+			"settings":
+			{
+				"buffer_size": 12190,
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "backend/server.js",
 			"settings":
 			{
-				"buffer_size": 7413,
+				"buffer_size": 19719,
 				"line_ending": "Unix"
 			}
 		},
@@ -351,7 +547,7 @@
 			"file": "db_arch.txt",
 			"settings":
 			{
-				"buffer_size": 335,
+				"buffer_size": 373,
 				"line_ending": "Unix"
 			}
 		},
@@ -359,15 +555,7 @@
 			"file": "frontend/js/app.js",
 			"settings":
 			{
-				"buffer_size": 622,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "frontend/partials/game.html",
-			"settings":
-			{
-				"buffer_size": 267,
+				"buffer_size": 642,
 				"line_ending": "Unix"
 			}
 		},
@@ -375,15 +563,7 @@
 			"file": "frontend/css/style.css",
 			"settings":
 			{
-				"buffer_size": 414,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "frontend/partials/queue.html",
-			"settings":
-			{
-				"buffer_size": 402,
+				"buffer_size": 1094,
 				"line_ending": "Unix"
 			}
 		},
@@ -391,7 +571,15 @@
 			"file": "frontend/js/controllers.js",
 			"settings":
 			{
-				"buffer_size": 8274,
+				"buffer_size": 13416,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/js/directives.js",
+			"settings":
+			{
+				"buffer_size": 2067,
 				"line_ending": "Unix"
 			}
 		}
@@ -436,8 +624,17 @@
 	},
 	"file_history":
 	[
+		"/Users/admin/Documents/dots/frontend/template/register.html",
+		"/Users/admin/Documents/dots/frontend/template/queue.html",
+		"/Users/admin/Documents/dots/frontend/template/login.html",
+		"/Users/admin/Documents/dots/frontend/template/game.html",
+		"/Users/admin/Documents/dots/frontend/template/countdown.html",
+		"/Users/admin/Documents/dots/frontend/partials/countdown.html",
+		"/Users/admin/Documents/dots/frontend/partials/game.html",
 		"/Users/admin/Documents/dots/frontend/partials/queue.html",
+		"/Users/admin/Documents/dots/frontend/partials/register.html",
 		"/Users/admin/Documents/dots/frontend/partials/login.html",
+		"/Volumes/OS/Users/Alexey/Documents/Лабы/C++ term1/1.tex",
 		"/Users/admin/Documents/dots/frontend/index.html",
 		"/Users/admin/Documents/dots/frontend/js/services.js",
 		"/Users/admin/Documents/dots/frontend/js/filters.js",
@@ -459,7 +656,7 @@
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -473,6 +670,18 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"$scope.requestDeclined",
+			"time",
+			"new_game",
+			"ceilheight",
+			"canvasHeight",
+			"taget",
+			"cancelRequest",
+			"heigth",
+			"min",
+			"heigth",
+			";\n",
+			"undefined",
 			");\n",
 			"setCountdown",
 			"					",
@@ -494,6 +703,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"height"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -504,7 +714,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -513,15 +723,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 674,
+						"buffer_size": 739,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								103,
-								103
+								65,
+								60
 							]
 						],
 						"settings":
@@ -533,24 +743,52 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "backend/server.js",
+					"file": "/Volumes/OS/Users/Alexey/Documents/Лабы/TP/1.tex",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7413,
+						"buffer_size": 12190,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3937,
-								3937
+								7051,
+								7425
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3420.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "backend/server.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 19719,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								15546,
+								15546
 							]
 						],
 						"settings":
@@ -559,27 +797,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2082.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "db_arch.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 335,
+						"buffer_size": 373,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								335,
-								335
+								11,
+								0
 							]
 						],
 						"settings":
@@ -590,136 +828,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "frontend/js/app.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 622,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								622,
-								622
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 7,
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "frontend/partials/game.html",
+					"file": "frontend/js/app.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 267,
+						"buffer_size": 642,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								229,
-								229
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "frontend/css/style.css",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 414,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								132,
-								132
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/CSS/CSS.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "frontend/partials/queue.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 402,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "frontend/js/controllers.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 8274,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7308,
-								7308
+								310,
+								323
 							]
 						],
 						"settings":
@@ -728,10 +854,97 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3620.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "frontend/css/style.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1094,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								759,
+								759
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "frontend/js/controllers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13416,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7994,
+								7994
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "frontend/js/directives.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2067,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1745,
+								1745
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 499.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -779,7 +992,7 @@
 	"project": "dots.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":

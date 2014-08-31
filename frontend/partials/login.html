@@ -1,13 +1,13 @@
-<h4>Вход</h4>
+﻿<h4>Вход</h4>
 <form name="loginForm">
 	<span ng-show="failure" id="login_failure">
 		Неправильное имя пользователя/пароль!
 		<br>
 		<br>
 	</span>
-	Имя пользователя: <input type="text" ng-model="name">
+	Имя пользователя: <input type="text" ng-model="name" name="name" required>
 	<br>
-	Пароль: <input type="password" ng-model="password">
+	Пароль: <input type="password" ng-model="password" name="password" required>
 	<br>
 	<button ng-click="login()">Войти</button>
 	<br>

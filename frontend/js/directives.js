@@ -3,7 +3,7 @@
 /* Directives */
 
 angular.module('dots.directives', []).
-	directive('countdown', ['$timeout', '$interval', function($timeout, $interval) { //<countdown ng-show="" time="" on-accept="" on-decline="" on-cancel="" is-failure="" failure-message="" timeout="">message</countdown>
+	directive('countdown', ['$timeout', '$interval', function($timeout, $interval) {
 		return {
 		    restrict: 'E',
 			templateUrl: 'partials/countdown.html',
@@ -44,7 +44,7 @@ angular.module('dots.directives', []).
 					$scope.ngShow = false;
 				};
 				$scope.onFailure = function() {
-					if($scope.ngShow == true && $scope.isFailure != false)
+					if($scope.ngShow != false && $scope.isFailure != false)
 						$scope.showError($scope.failureMessage);
 				};
 				$scope.onTimeout = function() {

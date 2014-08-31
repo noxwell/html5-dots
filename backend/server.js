@@ -19,6 +19,8 @@ function onAuth(request, response)
 	var name = request.param('name');
 	var password = request.param('password');
 	response.setHeader('Access-Control-Allow-Origin', ajax);
+	if(name == null || name == "" || password == null || password == "")
+		response.status(400).send('Bad request');
 	db.hget('users', name, function(err, id){
 		if(err) throw err;
 		if(id == null)
@@ -59,10 +61,11 @@ function checkAuth(auth, succ, fail)
 
 function onRegister(request, response)
 {
-
 	var name = request.param('name');
 	var password = request.param('password');
 	response.setHeader('Access-Control-Allow-Origin', ajax);
+	if(name == null || name == "" || password == null || password == "")
+		response.status(400).send('Bad request');
 	db.hget('users', name, function(err, id){
 		if(err) throw err;
 		if(id != null)
@@ -84,14 +87,19 @@ function getQueue(request, response)
 {
 	response.setHeader('Access-Control-Allow-Origin', ajax);
 	var auth = {id: request.param('id'), token: request.param('token')}
+	if(auth.id == null || auth.id == "" || auth.token == null || auth.token == "")
+		response.status(400).send('Bad request');
 	checkAuth(auth, function(){ //authorized
 		db.sort('queue', 'by', 'user:*->rating', 'get', '#', 'get', 'user:*->name', 'get', 'user:*->rating', function(err, reply){
 			var queue = [];
-			for(i = 0; i < reply.length / 3; i++)
+			if(reply != null)
 			{
-				var ix = i * 3;
-				if(reply[ix] != auth.id) 
-					queue.push({id: reply[ix], name: reply[ix + 1], rating: reply[ix + 2]});
+				for(i = 0; i < reply.length / 3; i++)
+				{
+					var ix = i * 3;
+					if(reply[ix] != auth.id) 
+						queue.push({id: reply[ix], name: reply[ix + 1], rating: reply[ix + 2]});
+				}
 			}
 			response.json({queue: queue});
 		});
@@ -104,12 +112,10 @@ function getGameData(request, response)
 {
 	response.setHeader('Access-Control-Allow-Origin', ajax);
 	var auth = {id: request.param('id'), token: request.param('token')};
+	var channel = request.param('channel');
+	if(auth.id == null || auth.id == "" || auth.token == null || auth.token == "" || channel == null || channel == "")
+		response.status(400).send('Bad request');
 	checkAuth(auth, function(){
-		var channel = request.param('channel');
-		if(channel == null)
-		{
-			return response.status(400).send('Bad request');
-		}
 		db.hget('games', channel, function(err, game_id){
 			if(game_id == null)
 			{
@@ -122,6 +128,16 @@ function getGameData(request, response)
 	}, function(){
 		return response.status(401).send('Invalid token!');
 	});
+}
+
+app.post('/auth', onAuth);
+app.post('/register', onRegister);
+app.get('/queue', getQueue);
+app.get('/gamedata', getGameData);
+
+function timestamp()
+{
+	return Math.round(Date.now() / 1000);
 }
 
 function kickPlayer(id)
@@ -191,7 +207,7 @@ function createGame(player_1, player_2, message, callback)
 				db.incr('last_gameid', function(err, game_id){
 					db.hset('games', channel, game_id);
 					db.hmset('game:' + game_id, 'channel', channel, 'field', emptyField(), 'player_1', player_1, 'score_1', 0, 'player_2', player_2, 'score_2', 0, 'current_player', 1);
-					bayeux.getClient().publish('/game/queue', {type: 'new_game', id: 0, channel: channel, player_1: player_1, player_2: player_2});
+					bayeux.getClient().publish('/game/queue', {type: 'newgame', id: 0, channel: channel, player_1: player_1, player_2: player_2});
 				});
 			});
 		}
@@ -523,6 +539,49 @@ function gameOver(game_id, game, draw, message, callback)
 	callback(message);
 }
 
+function unauthorized_message(message, callback){
+	return function(){
+		console.log('unauth, ', message.channel);
+		message.error = '403::Authentication required';
+		callback(message);
+	};
+}
+
+function queueChannel(user, message, callback)
+{
+	if(message.type == 'newgame' && message.data.id != 0) //only server can send newgame messages
+			return unauthorized_message(message, callback)();
+	if(message.data.type == 'heartbeat')
+	{
+		message.data.name = user.name;
+		message.data.rating = user.rating;
+		db.zadd('queue', timestamp(), message.data.id);
+	}
+
+	if(message.data.type == 'quit')
+	{
+		console.log('Player', message.data.id, 'quit');
+		db.zrem('queue', message.data.id);
+	}
+
+	if(message.data.type == 'request')
+	{
+		message.data.user = {name: user.name, rating: user.rating};
+		return addRequest(message.data.id, 'newgame', message.data.target, message, callback);
+	}
+
+	if(message.data.type == 'accept')
+	{
+		return createGame(message.data.target, message.data.id, message, callback);
+	}
+
+	if(message.data.type == 'decline' && (message.data.id == message.data.init || message.data.id == message.data.target))
+	{
+		return cancelRequest(message.data.init, message.data.target, message, callback);
+	}
+	return callback(message);
+}
+
 function gameChannel(channel, id, message, callback)
 {
 	db.hget('games', channel, function(err, game_id){
@@ -597,25 +656,44 @@ function gameChannel(channel, id, message, callback)
 	});
 }
 
-app.post('/auth', onAuth);
-app.post('/register', onRegister);
-app.get('/queue', getQueue);
-app.get('/gameData', getGameData);
+function incomingMessage(message, callback){
+	if (message.channel.substring(0, 5) == '/meta' && message.channel != '/meta/subscribe' && message.channel != '/meta/disconnect')
+	    return callback(message);
+
+	var auth = message.auth;
+	if(auth == null)
+	{
+		return unauthorized_message(message, callback)();
+	}
+	delete message.auth;
+
+	if(auth.token == server_token) //message sent by server
+	{
+		return callback(message);
+	}
+
+	checkAuth(auth, function(user){
+		if(message.data != null)
+			message.data.id = auth.id;
+
+		if(message.channel == '/meta/disconnect')
+		{
+			kickPlayer(auth.id);
+		}
+
+		if(message.channel == '/game/queue')
+			return queueChannel(user, message, callback);
+
+		var game_channel = /\/game\/([a-f0-9]+)$/.exec(message.channel);
+		if(game_channel != null && typeof game_channel[1] !== 'undefined')
+			return gameChannel(game_channel[1], auth.id, message, callback);
+
+		callback(message);
+	}, unauthorized_message(message, callback));
+}
 
 //pub-sub engine
 var server_token = 'suppasecretservertoken';
-function timestamp()
-{
-	return Math.round(Date.now() / 1000);
-}
-
-var unauthorized_message = function(message, callback){
-	return function(){
-		console.log('unauth, ', message.channel);
-		message.error = '403::Authentication required';
-		callback(message);
-	};
-}
 
 bayeux.getClient().addExtension({
 	outgoing: function(message, callback) {
@@ -626,70 +704,7 @@ bayeux.getClient().addExtension({
 	}
 });
 
-bayeux.addExtension({
-	incoming: function(message, callback){
-		if (message.channel.substring(0, 5) == '/meta' && message.channel != '/meta/subscribe' && message.channel != '/meta/disconnect')
-		    return callback(message);
-
-		var auth = message.auth;
-		if(auth == null)
-		{
-			return unauthorized_message(message, callback)();
-		}
-		delete message.auth;
-
-		if(auth.token == server_token) //message sent by server
-		{
-			return callback(message);
-		}
-
-		checkAuth(auth, function(user){
-			if(message.data != null)
-				message.data.id = auth.id;
-
-			var game_channel = /\/game\/([a-f0-9]+)$/.exec(message.channel);
-			if(game_channel != null && typeof game_channel[1] !== 'undefined')
-				return gameChannel(game_channel[1], auth.id, message, callback);
-
-			if(message.channel == '/game/queue' && message.type == 'new_game' && auth.id != 0) //only server can send new_game messages
-				return unauthorized_message(message, callback)();
-			if(message.channel == '/game/queue' && message.data.type == 'heartbeat')
-			{
-				message.data.name = user.name;
-				message.data.rating = user.rating;
-				db.zadd('queue', timestamp(), auth.id);
-			}
-
-			if(message.channel == '/game/queue' && message.data.type == 'quit')
-			{
-				console.log('Player', auth.id, 'quit');
-				db.zrem('queue', auth.id);
-			}
-
-			if(message.channel == '/game/queue' && message.data.type == 'request')
-			{
-				message.data.user = {name: user.name, rating: user.rating};
-				return addRequest(auth.id, 'newgame', message.data.target, message, callback);
-			}
-
-			if(message.channel == '/game/queue' && message.data.type == 'accept')
-			{
-				return createGame(message.data.target, auth.id, message, callback);
-			}
-
-			if(message.channel == '/game/queue' && message.data.type == 'decline' && (auth.id == message.data.init || auth.id == message.data.target))
-			{
-				return cancelRequest(message.data.init, message.data.target, message, callback);
-			}
-
-			if(message.channel == '/meta/disconnect')
-			{
-				kickPlayer(auth.id);
-			}
-			callback(message);
-		}, unauthorized_message(message, callback));
-	}
-});
+bayeux.addExtension({incoming: incomingMessage});
 
 function garbageCollector()
 {
