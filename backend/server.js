@@ -4,13 +4,13 @@ var bodyParser = require('body-parser');
 var faye = require('faye');
 var redis = require('redis');
 var url = require('url');
-var crypto = require('crypto')
+var crypto = require('crypto');
 
 var app = express();
 var server = http.createServer(app);
 var db = redis.createClient(6379, 'acm.tpu.ru');
 var bayeux = new faye.NodeAdapter({mount: '/game', timeout: 45});
-var ajax = 'file://';
+var ajax = '*'; //for debug purposes, CHANGE IN PRODUCTION
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -20,12 +20,12 @@ function onAuth(request, response)
 	var password = request.param('password');
 	response.setHeader('Access-Control-Allow-Origin', ajax);
 	if(name == null || name == "" || password == null || password == "")
-		response.status(400).send('Bad request');
+		return response.status(400).send('Bad request');
 	db.hget('users', name, function(err, id){
 		if(err) throw err;
 		if(id == null)
 		{
-			response.status(401).send('Invalid username/password');
+			return response.status(401).send('Invalid username/password');
 		}
 		else
 		{
@@ -33,14 +33,14 @@ function onAuth(request, response)
 				if(err) throw err;
 				if(password != passwd)
 				{
-					response.status(401).send('Invalid username/password');
+					return response.status(401).send('Invalid username/password');
 				}
 				else
 				{
 					crypto.randomBytes(10, function(err, buf){
 						var token = buf.toString('hex');
 						db.hset('user:' + id, 'token', token);
-						response.json({id: id, token: token});
+						return response.json({id: id, token: token});
 					});
 				}
 			});
@@ -65,19 +65,19 @@ function onRegister(request, response)
 	var password = request.param('password');
 	response.setHeader('Access-Control-Allow-Origin', ajax);
 	if(name == null || name == "" || password == null || password == "")
-		response.status(400).send('Bad request');
+		return response.status(400).send('Bad request');
 	db.hget('users', name, function(err, id){
 		if(err) throw err;
 		if(id != null)
 		{
-			response.status(406).send('Already exists');
+			return response.status(406).send('Already exists');
 		}
 		else
 		{
 			db.incr('last_userid', function(err, user_id){
 				db.hset('users', name, user_id);
 				db.hmset('user:' + user_id, 'name', name, 'password', password, 'token', '', 'rating', '1600');
-				response.send('OK!');
+				return response.send('OK!');
 			});
 		}
 	});
@@ -88,7 +88,7 @@ function getQueue(request, response)
 	response.setHeader('Access-Control-Allow-Origin', ajax);
 	var auth = {id: request.param('id'), token: request.param('token')}
 	if(auth.id == null || auth.id == "" || auth.token == null || auth.token == "")
-		response.status(400).send('Bad request');
+		return response.status(400).send('Bad request');
 	checkAuth(auth, function(){ //authorized
 		db.sort('queue', 'by', 'user:*->rating', 'get', '#', 'get', 'user:*->name', 'get', 'user:*->rating', function(err, reply){
 			var queue = [];
@@ -101,10 +101,10 @@ function getQueue(request, response)
 						queue.push({id: reply[ix], name: reply[ix + 1], rating: reply[ix + 2]});
 				}
 			}
-			response.json({queue: queue});
+			return response.json({queue: queue});
 		});
 	}, function(){
-		response.status(401).send('Invalid token!');
+		return response.status(401).send('Invalid token!');
 	});
 }
 
@@ -114,7 +114,7 @@ function getGameData(request, response)
 	var auth = {id: request.param('id'), token: request.param('token')};
 	var channel = request.param('channel');
 	if(auth.id == null || auth.id == "" || auth.token == null || auth.token == "" || channel == null || channel == "")
-		response.status(400).send('Bad request');
+		return response.status(400).send('Bad request');
 	checkAuth(auth, function(){
 		db.hget('games', channel, function(err, game_id){
 			if(game_id == null)

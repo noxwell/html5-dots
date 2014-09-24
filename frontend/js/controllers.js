@@ -358,6 +358,7 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 	};
 
 	$scope.declineRequest = function(){
+		console.log("snt dcln");
 		$scope.pubsub.publish('/game/' + $scope.channel, {type: 'decline', init: (3 - $scope.player), target: $scope.player});
 	};
 
@@ -391,6 +392,7 @@ controllers.controller('gameScreenCtrl', ['$scope', '$location', '$routeParams',
 				});
 				break;
 			case 'decline':
+				console.log("decl");
 				if(message.player != $scope.player)
 				{
 					$scope.$apply(function(){

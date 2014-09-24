@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"col",
+				"console"
+			],
+			[
 				"ca",
 				"callback"
 			],
@@ -510,44 +514,16 @@
 			[
 				"ex",
 				"execInContentScript"
-			],
-			[
-				"fu",
-				"function"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "frontend/index.html",
-			"settings":
-			{
-				"buffer_size": 739,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Volumes/OS/Users/Alexey/Documents/Лабы/TP/1.tex",
-			"settings":
-			{
-				"buffer_size": 12190,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "backend/server.js",
 			"settings":
 			{
-				"buffer_size": 19719,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "db_arch.txt",
-			"settings":
-			{
-				"buffer_size": 373,
+				"buffer_size": 19834,
 				"line_ending": "Unix"
 			}
 		},
@@ -560,18 +536,10 @@
 			}
 		},
 		{
-			"file": "frontend/css/style.css",
-			"settings":
-			{
-				"buffer_size": 1094,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "frontend/js/controllers.js",
 			"settings":
 			{
-				"buffer_size": 13416,
+				"buffer_size": 13468,
 				"line_ending": "Unix"
 			}
 		},
@@ -580,6 +548,14 @@
 			"settings":
 			{
 				"buffer_size": 2067,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/partials/game.html",
+			"settings":
+			{
+				"buffer_size": 1724,
 				"line_ending": "Unix"
 			}
 		}
@@ -624,21 +600,25 @@
 	},
 	"file_history":
 	[
+		"/Users/admin/Documents/dots/frontend/template/game.html",
+		"/Volumes/OS/Users/Alexey/Documents/Лабы/TP/1.tex",
+		"/Users/admin/Documents/dots/frontend/index.html",
 		"/Users/admin/Documents/dots/frontend/template/register.html",
+		"/Users/admin/Documents/dots/frontend/template/countdown.html",
 		"/Users/admin/Documents/dots/frontend/template/queue.html",
 		"/Users/admin/Documents/dots/frontend/template/login.html",
-		"/Users/admin/Documents/dots/frontend/template/game.html",
-		"/Users/admin/Documents/dots/frontend/template/countdown.html",
+		"/Users/admin/Documents/dots/db_arch.txt",
+		"/Users/admin/Documents/dots/frontend/css/style.css",
+		"/Users/admin/Documents/dots/frontend/js/directives.js",
+		"/Users/admin/Documents/dots/frontend/js/controllers.js",
 		"/Users/admin/Documents/dots/frontend/partials/countdown.html",
 		"/Users/admin/Documents/dots/frontend/partials/game.html",
 		"/Users/admin/Documents/dots/frontend/partials/queue.html",
 		"/Users/admin/Documents/dots/frontend/partials/register.html",
 		"/Users/admin/Documents/dots/frontend/partials/login.html",
 		"/Volumes/OS/Users/Alexey/Documents/Лабы/C++ term1/1.tex",
-		"/Users/admin/Documents/dots/frontend/index.html",
 		"/Users/admin/Documents/dots/frontend/js/services.js",
 		"/Users/admin/Documents/dots/frontend/js/filters.js",
-		"/Users/admin/Documents/dots/frontend/js/directives.js",
 		"/Users/admin/Documents/dots/backend/server.js",
 		"/Users/admin/Documents/contest/cf_toolkit/manifest.json",
 		"/Users/admin/Documents/contest/cf_test_parser/options.js",
@@ -670,6 +650,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"consol",
+			"response",
 			"$scope.requestDeclined",
 			"time",
 			"new_game",
@@ -714,81 +696,24 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 4,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "frontend/index.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 739,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								65,
-								60
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/Volumes/OS/Users/Alexey/Documents/Лабы/TP/1.tex",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 12190,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7051,
-								7425
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 3420.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
 					"file": "backend/server.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19719,
+						"buffer_size": 19834,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15546,
-								15546
+								17628,
+								17628
 							]
 						],
 						"settings":
@@ -797,42 +722,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 10491.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "db_arch.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 373,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								11,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
+					"buffer": 1,
 					"file": "frontend/js/app.js",
 					"semi_transient": false,
 					"settings":
@@ -857,53 +754,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "frontend/css/style.css",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1094,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								759,
-								759
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/CSS/CSS.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
+					"buffer": 2,
 					"file": "frontend/js/controllers.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13416,
+						"buffer_size": 13468,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7994,
-								7994
+								10691,
+								10691
 							]
 						],
 						"settings":
@@ -912,14 +780,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 5719.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 3,
 					"file": "frontend/js/directives.js",
 					"semi_transient": false,
 					"settings":
@@ -931,8 +799,8 @@
 						"selection":
 						[
 							[
-								1745,
-								1745
+								84,
+								86
 							]
 						],
 						"settings":
@@ -941,7 +809,36 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 499.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "frontend/partials/game.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1724,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1359,
+								1359
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -952,7 +849,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 34.0
+		"height": 25.0
 	},
 	"input":
 	{
@@ -992,7 +889,7 @@
 	"project": "dots.sublime-project",
 	"replace":
 	{
-		"height": 64.0
+		"height": 46.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1019,6 +916,7 @@
 		],
 		"width": 0.0
 	},
+	"selected_group": 0,
 	"settings":
 	{
 	},
