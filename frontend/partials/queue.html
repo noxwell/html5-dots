@@ -1,10 +1,27 @@
-﻿<h4>Очередь ожидания</h4>
-<span id="no_queue" ng-show="queue.length == 0">Никого нет онлайн</span>
-<ul class="queue">
-  <li ng-repeat="user in queue" ng-click="requestGame(user.id)">
-    {{user.name}}
-    <p>id: {{user.id}}, rating: {{user.rating}}</p>
-  </li>
-</ul>
-<countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от игры с вами." timeout="Время ожидания соперника истекло.">Игрок {{requestDetails.name}} (рейтинг {{requestDetails.rating}}) хочет сыграть с вами</countdown>
-<countdown ng-show="waitingAccept" time="15" on-cancel="cancelRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от игры с вами" timeout="Время ожидания истекло.">Ожидание соперника...</countdown>
+﻿<nav class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Точки</a>
+    </div>
+    <div id="navbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#/queue">Очередь ожидания</a></li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li><a href ng-click="logout()">Выход</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+<div class="container">
+  <h4>Очередь ожидания</h4>
+  <span id="no_queue" ng-show="queue.length == 0">Никого нет онлайн</span>
+  <div class="queue list-group" ng-show="queue.length > 0">
+    <a href class="list-group-item" ng-repeat="user in queue" ng-click="requestGame(user.id)">
+      {{user.name}}
+      <span class="badge">Рейтинг: {{user.rating}}</span>
+    </a>
+  </div>
+  <countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от игры с вами." timeout="Время ожидания соперника истекло.">Игрок {{requestDetails.name}} (рейтинг {{requestDetails.rating}}) хочет сыграть с вами</countdown>
+  <countdown ng-show="waitingAccept" time="15" on-cancel="cancelRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от игры с вами" timeout="Время ожидания истекло.">Ожидание соперника...</countdown>
+</div>

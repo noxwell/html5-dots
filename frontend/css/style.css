@@ -30,6 +30,11 @@
 	cursor: default;
 }
 
+#game_control .row
+{
+  margin-top: 10px;
+}
+
 #current_player
 {
 	width: 300px;
@@ -40,27 +45,19 @@
 	text-align: center;
 }
 
-#scores
-{
-	width: 980px;
-	margin-top: 300px;
-	margin-left: auto;
-	margin-right: auto;
-	font-size: 30pt;
-	text-align: center;
-}
-
 #score_1
 {
-	float: left;
-	width: 80px;
+  padding-top: 300px;
+  font-size: 30pt;
+	text-align: right;
 	color: red;
 }
 
 #score_2
 {
-	float: right;
-	width: 80px;
+  padding-top: 300px;
+  font-size: 30pt;
+	text-align: left;
 	color: blue;
 }
 
@@ -69,14 +66,15 @@
 	/*background: url('../img/bg.png') repeat;
 	background-position-x: 4px;
 	background-position-y: 4px;*/
-	position: absolute;
+	/*position: absolute;
 	top: 50px;
 	left: 50%;
 	width: 810px;
 	height: 663px;
 	margin-top: 30px;
 	margin-left: -405px;
-	font-size: 20pt;
+	font-size: 20pt;*/
+  text-align: center;
 }
 
 #field_canvas
@@ -89,8 +87,6 @@
 
 #control_panel
 {
-	position: relative;
-	top: 370px;
 	clear: both;
 	float: left;
 	display: block;

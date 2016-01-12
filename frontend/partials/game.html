@@ -1,23 +1,42 @@
-﻿<div id="current_player" ng-attr-class="{{'color_' + current_player}}">
-	<span ng-show="current_player == player">Ваш ход</span>
-	<span ng-show="current_player != player">Ход соперника</span>
-</div>
-<div id="scores">
-	<div id="score_1">{{score[1]}}</div>
-	<div id="score_2">{{score[2]}}</div>
-</div>
-<div id="game_field">
-	<canvas id='field_canvas' ng-click="canvasClick($event)" width="806" height="660"></canvas>
-</div>
-<div id="control_panel">
-	<button ng-click="requestDraw()">Запросить ничью</button>
-	<button ng-click="requestSurrender()">Запросить конец игры</button>
-	<div id="draw_request" ng-show="requestedDraw">
-		<countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от ничьи." timeout="Время ожидания соперника истекло.">Соперник предлагает вам ничью.</countdown>
-		<countdown ng-show="waitingAccept" time="15" on-cancel="cancelRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от ничьи." timeout="Время ожидания истекло.">Ожидание соперника...</countdown>
-	</div>
-	<div id="surrender_request" ng-show="requestedSurrender">
-		<countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от вашего предложения." timeout="Время ожидания соперника истекло.">Соперник предлагает вам завершить игру с текущим счетом.</countdown>
-		<countdown ng-show="waitingAccept" time="15" on-cancel="cancelRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от ничьи." timeout="Время ожидания истекло.">Ожидание соперника...</countdown>
-	</div>
+﻿<nav class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Точки</a>
+    </div>
+    <div id="navbar">
+      <ul class="nav navbar-nav">
+        <li><a href="#/queue">Очередь ожидания</a></li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li><a href ng-click="logout()">Выход</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+<div class="container" id="game_control">
+  <div class="row">
+    <div id="current_player" ng-attr-class="{{'color_' + current_player}}">
+      <span ng-show="current_player == player">Ваш ход</span>
+      <span ng-show="current_player != player">Ход соперника</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-1" id="score_1">{{score[1]}}</div>
+    <div class="col-md-10" id="game_field">
+      <canvas id='field_canvas' ng-click="canvasClick($event)" width="806" height="660"></canvas>
+    </div>
+    <div class="col-md-1" id="score_2">{{score[2]}}</div>
+  </div>
+  <div class="row" id="control_panel">
+    <button class="btn btn-default" ng-click="requestDraw()">Запросить ничью</button>
+    <button class="btn btn-default" ng-click="requestSurrender()">Запросить конец игры</button>
+    <div id="draw_request" ng-show="requestedDraw">
+      <countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от ничьи." timeout="Время ожидания соперника истекло.">Соперник предлагает вам ничью.</countdown>
+      <countdown ng-show="waitingAccept" time="15" on-cancel="cancelRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от ничьи." timeout="Время ожидания истекло.">Ожидание соперника...</countdown>
+    </div>
+    <div id="surrender_request" ng-show="requestedSurrender">
+      <countdown ng-show="acceptingRequest" time="15" on-accept="acceptRequest()" on-decline="declineRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от вашего предложения." timeout="Время ожидания соперника истекло.">Соперник предлагает вам завершить игру с текущим счетом.</countdown>
+      <countdown ng-show="waitingAccept" time="15" on-cancel="cancelRequest()" is-failure="requestDeclined" failure-message="Соперник отказался от ничьи." timeout="Время ожидания истекло.">Ожидание соперника...</countdown>
+    </div>
+  </div>
 </div>

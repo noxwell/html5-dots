@@ -1,15 +1,43 @@
-﻿<h4>Вход</h4>
-<form name="loginForm">
-	<span ng-show="failure" id="login_failure">
-		Неправильное имя пользователя/пароль!
-		<br>
-		<br>
-	</span>
-	Имя пользователя: <input type="text" ng-model="name" name="name" required>
-	<br>
-	Пароль: <input type="password" ng-model="password" name="password" required>
-	<br>
-	<button ng-click="login()">Войти</button>
-	<br>
-	<a href="#/register">Зарегистрироваться</a>
-</form>
+﻿<nav class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Точки</a>
+    </div>
+    <div id="navbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#/login">Вход</a></li>
+        <li><a href="#/register">Регистрация</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+<div class="container">
+  <h4>Вход</h4>
+  <form name="loginForm" class="form-horizontal">
+    <div class="form-group" ng-show="failure" id="login_failure">
+      <div class="col-lg-4">
+        <div class="alert alert-danger">Неправильное имя пользователя/пароль!</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-4">
+        <input type="text" ng-model="name" name="name" class="form-control" placeholder="Имя пользователя" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-4">
+        <input type="password" ng-model="password" name="password" class="form-control" placeholder="Пароль" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-4">
+        <button class="btn btn-default" ng-click="login();">Войти</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-4">
+        Нет имени пользователя? <a href="#/register">Зарегистрируйтесь</a>
+      </div>
+    </div>
+  </form>
+</div>

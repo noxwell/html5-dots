@@ -3,7 +3,7 @@
 /* Controllers */
 
 var controllers = angular.module('dots.controllers', []);
-var server = 'http://localhost:8888';
+var server = 'http://acm.tpu.ru:7777';
 
 controllers.controller('appCtrl', ['$scope', '$localStorage', '$location', function($scope, $localStorage, $location) {
 	$scope.$storage = $localStorage.$default({
@@ -25,6 +25,11 @@ controllers.controller('appCtrl', ['$scope', '$localStorage', '$location', funct
 	$scope.pubsub = new Faye.Client(server + '/game');
 	$scope.leaveChannel = function(channel){
 		$scope.pubsub.publish(channel, {type: 'quit'});
+	};
+  $scope.logout = function(){
+    $scope.$storage.loggedIn = false;
+		$scope.pubsub.disconnect();
+    $location.path('/login');
 	};
 	$scope.pubsub.addExtension({
 		outgoing: function(message, callback) {

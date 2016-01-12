@@ -1,9 +1,9 @@
 ﻿<div class="countdown" ng-show="timeLeft > 0">
 	<div class="countdown_message" ng-transclude></div>
 	<h1>{{timeLeft}}</h1>
-	  <button ng-show="canAccept" ng-click="accept()">Принять</button>
-	  <button ng-show="canAccept" ng-click="decline()">Отклонить</button>
-	  <button ng-hide="canAccept" ng-click="cancel()">Отменить</button>
+	  <button class="btn btn-default" ng-show="canAccept" ng-click="accept()">Принять</button>
+	  <button class="btn btn-default" ng-show="canAccept" ng-click="decline()">Отклонить</button>
+	  <button class="btn btn-default" ng-hide="canAccept" ng-click="cancel()">Отменить</button>
 </div>
 <div class="error_message" ng-hide="timeLeft > 0">
 	{{error}}
